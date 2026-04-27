@@ -1,4 +1,3 @@
-// ── Sélecteurs DOM ────────────────────────────────────
 const messagesEl  = document.getElementById('messages');
 const userInput   = document.getElementById('userInput');
 const codeContent = document.getElementById('codeContent');
@@ -12,13 +11,13 @@ let sessionCount = 1;
 let darkMode     = false;
 let allSessions  = [];
 
-// ── Auto-resize textarea ──────────────────────────────
+// ── Auto-resize textarea ──────────────────
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 140) + 'px';
 }
 
-// ── Entrée / Shift+Entrée ─────────────────────────────
+// ── Entrée / Shift+Entrée ─────────────────
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -26,9 +25,9 @@ function handleKey(e) {
   }
 }
 
-// ── Ajouter un message ────────────────────────────────
+// ── Ajouter un message ────────────────────
 function addMessage(text, role) {
-  const div    = document.createElement('div');
+  const div = document.createElement('div');
   div.className = `message ${role}`;
 
   const avatar = document.createElement('div');
@@ -53,6 +52,6 @@ function addMessage(text, role) {
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
-// ── Extraire le code d'une réponse ────────────────────
+// ── Extraire le code ──────────────────────
 function extractCode(text) {
   const match = text.match(/
