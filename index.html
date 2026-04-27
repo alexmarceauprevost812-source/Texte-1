@@ -5,395 +5,218 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Menus Gauche & Droite</title>
   <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #0f0f0f;
       color: #f0f0f0;
       min-height: 100vh;
-      overflow-x: hidden;
     }
 
-    /* ===== TOPBAR ===== */
+    /* === TOPBAR === */
     .topbar {
       position: fixed;
       top: 0; left: 0; right: 0;
-      height: 56px;
+      height: 54px;
       background: #1a1a2e;
       border-bottom: 2px solid #e94560;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 14px;
       z-index: 1000;
     }
 
-    .topbar .logo {
-      font-size: 1.2rem;
+    .logo {
+      font-size: 1.1rem;
       font-weight: 700;
       color: #e94560;
       letter-spacing: 2px;
     }
 
-    .topbar .actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    /* ===== BOUTON HAMBURGER ===== */
     .btn-toggle {
       background: #e94560;
       border: none;
       color: #fff;
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 8px;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s, transform 0.2s;
+      transition: background 0.2s;
     }
-    .btn-toggle:hover {
-      background: #c73652;
-      transform: scale(1.08);
-    }
+    .btn-toggle:hover { background: #c73652; }
+    .btn-toggle.right  { background: #5c7cfa; }
+    .btn-toggle.right:hover { background: #3a5bd9; }
 
-    /* ===== OVERLAY ===== */
+    /* === OVERLAY === */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.5);
       z-index: 900;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.3s;
     }
-    .overlay.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .overlay.visible { opacity: 1; pointer-events: all; }
 
-    /* ===== SIDEBAR GAUCHE ===== */
+    /* === SIDEBAR GAUCHE === */
     .sidebar-left {
       position: fixed;
       top: 0; left: 0;
-      width: 270px;
+      width: 240px;
       height: 100%;
       background: #16213e;
       border-right: 2px solid #e94560;
       z-index: 1100;
       transform: translateX(-100%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.3s ease;
       display: flex;
       flex-direction: column;
     }
-    .sidebar-left.open {
-      transform: translateX(0);
-    }
+    .sidebar-left.open { transform: translateX(0); }
 
-    /* ===== SIDEBAR DROITE ===== */
+    /* === SIDEBAR DROITE === */
     .sidebar-right {
       position: fixed;
       top: 0; right: 0;
-      width: 270px;
+      width: 240px;
       height: 100%;
       background: #1a1a2e;
-      border-left: 2px solid #0f3460;
+      border-left: 2px solid #5c7cfa;
       z-index: 1100;
       transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.3s ease;
       display: flex;
       flex-direction: column;
     }
-    .sidebar-right.open {
-      transform: translateX(0);
-    }
+    .sidebar-right.open { transform: translateX(0); }
 
-    /* ===== SIDEBAR HEADER ===== */
+    /* === SIDEBAR HEADER === */
     .sidebar-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 20px;
+      padding: 16px 18px;
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-    .sidebar-header h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #e94560;
-    }
-    .sidebar-right .sidebar-header h2 {
-      color: #0f3460;
-      color: #5c7cfa;
-    }
+    .sidebar-header h2 { font-size: 0.95rem; color: #e94560; text-transform: uppercase; letter-spacing: 1px; }
+    .sidebar-right .sidebar-header h2 { color: #5c7cfa; }
 
-    /* ===== BOUTON FERMER ===== */
-    .btn-close-sidebar {
+    /* === BOUTON FERMER === */
+    .btn-close {
       background: transparent;
-      border: 2px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.2);
       color: #fff;
-      width: 34px;
-      height: 34px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      font-size: 1.1rem;
+      font-size: 1rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s, border-color 0.2s, transform 0.2s;
-      line-height: 1;
+      transition: background 0.2s, transform 0.2s;
     }
-    .btn-close-sidebar:hover {
-      background: #e94560;
-      border-color: #e94560;
-      transform: rotate(90deg);
-    }
-    .sidebar-right .btn-close-sidebar:hover {
-      background: #5c7cfa;
-      border-color: #5c7cfa;
-    }
+    .btn-close:hover { background: #e94560; border-color: #e94560; transform: rotate(90deg); }
+    .sidebar-right .btn-close:hover { background: #5c7cfa; border-color: #5c7cfa; }
 
-    /* ===== SIDEBAR NAV LIENS ===== */
-    .sidebar-nav {
-      list-style: none;
-      padding: 16px 0;
-      flex: 1;
-      overflow-y: auto;
-    }
+    /* === LIENS NAV === */
+    .sidebar-nav { list-style: none; padding: 12px 0; flex: 1; }
     .sidebar-nav li a {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 13px 24px;
+      gap: 10px;
+      padding: 12px 20px;
       color: #ccc;
       text-decoration: none;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       border-left: 3px solid transparent;
       transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
     .sidebar-nav li a:hover {
-      background: rgba(233, 69, 96, 0.12);
+      background: rgba(233,69,96,0.1);
       color: #fff;
       border-left-color: #e94560;
     }
     .sidebar-right .sidebar-nav li a:hover {
-      background: rgba(92, 124, 250, 0.12);
-      border-left-color: #5c7cfa;
+      background: rgba(92,124,250,0.1);
       border-left: none;
       border-right: 3px solid #5c7cfa;
     }
-    .sidebar-nav li a .icon { font-size: 1.1rem; }
 
-    /* ===== SIDEBAR FOOTER ===== */
-    .sidebar-footer {
-      padding: 16px 20px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.3);
-      text-align: center;
+    /* === CONTENU === */
+    .main {
+      margin-top: 54px;
+      padding: 36px 28px;
     }
-
-    /* ===== CONTENU PRINCIPAL ===== */
-    .main-content {
-      margin-top: 56px;
-      padding: 40px 30px;
-      transition: margin 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      min-height: calc(100vh - 56px);
-    }
-
-    .main-content h1 {
-      font-size: 2rem;
-      color: #e94560;
-      margin-bottom: 16px;
-    }
-    .main-content p {
-      color: #999;
-      line-height: 1.7;
-      max-width: 600px;
-    }
-
-    /* Indicateur visuel panneaux ouverts */
-    .badge-panel {
-      display: inline-block;
-      background: #e94560;
-      color: #fff;
-      font-size: 0.7rem;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin: 6px 4px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .badge-panel.right { background: #5c7cfa; }
-
-    /* ===== CARDS DEMO ===== */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 18px;
-      margin-top: 30px;
-    }
-    .card {
-      background: #16213e;
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px;
-      padding: 22px;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: #e94560;
-    }
-    .card h3 { font-size: 0.9rem; color: #e94560; margin-bottom: 8px; }
-    .card p  { font-size: 0.82rem; color: #888; }
-
-    /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #e94560; border-radius: 3px; }
+    .main h1 { font-size: 1.6rem; color: #e94560; margin-bottom: 10px; }
+    .main p  { color: #888; line-height: 1.6; }
   </style>
 </head>
 <body>
 
-  <!-- OVERLAY -->
   <div class="overlay" id="overlay"></div>
 
-  <!-- ====== SIDEBAR GAUCHE ====== -->
+  <!-- SIDEBAR GAUCHE -->
   <aside class="sidebar-left" id="sidebarLeft">
     <div class="sidebar-header">
       <h2>📂 Menu</h2>
-      <button class="btn-close-sidebar" id="closeBtnLeft" title="Fermer">✕</button>
+      <button class="btn-close" id="closeBtnLeft">✕</button>
     </div>
     <ul class="sidebar-nav">
-      <li><a href="#"><span class="icon">🏠</span> Accueil</a></li>
-      <li><a href="#"><span class="icon">📊</span> Tableau de bord</a></li>
-      <li><a href="#"><span class="icon">📁</span> Projets</a></li>
-      <li><a href="#"><span class="icon">📝</span> Documents</a></li>
-      <li><a href="#"><span class="icon">💬</span> Messages</a></li>
-      <li><a href="#"><span class="icon">⭐</span> Favoris</a></li>
-      <li><a href="#"><span class="icon">🗂️</span> Archives</a></li>
-      <li><a href="#"><span class="icon">📅</span> Calendrier</a></li>
-      <li><a href="#"><span class="icon">⚙️</span> Paramètres</a></li>
+      <li><a href="#">🏠 Accueil</a></li>
+      <li><a href="#">📊 Dashboard</a></li>
+      <li><a href="#">📁 Projets</a></li>
+      <li><a href="#">📝 Documents</a></li>
+      <li><a href="#">💬 Messages</a></li>
+      <li><a href="#">⚙️ Paramètres</a></li>
     </ul>
-    <div class="sidebar-footer">TI-LEX Platform v1.0</div>
   </aside>
 
-  <!-- ====== SIDEBAR DROITE ====== -->
+  <!-- SIDEBAR DROITE -->
   <aside class="sidebar-right" id="sidebarRight">
     <div class="sidebar-header">
-      <button class="btn-close-sidebar" id="closeBtnRight" title="Fermer">✕</button>
+      <button class="btn-close" id="closeBtnRight">✕</button>
       <h2>🔧 Outils</h2>
     </div>
     <ul class="sidebar-nav">
-      <li><a href="#"><span class="icon">🔔</span> Notifications</a></li>
-      <li><a href="#"><span class="icon">👤</span> Profil</a></li>
-      <li><a href="#"><span class="icon">🎨</span> Thèmes</a></li>
-      <li><a href="#"><span class="icon">🔗</span> Intégrations</a></li>
-      <li><a href="#"><span class="icon">🛡️</span> Sécurité</a></li>
-      <li><a href="#"><span class="icon">📱</span> Mobile</a></li>
-      <li><a href="#"><span class="icon">💡</span> Aide</a></li>
-      <li><a href="#"><span class="icon">🚪</span> Déconnexion</a></li>
+      <li><a href="#">🔔 Notifications</a></li>
+      <li><a href="#">👤 Profil</a></li>
+      <li><a href="#">🎨 Thèmes</a></li>
+      <li><a href="#">🛡️ Sécurité</a></li>
+      <li><a href="#">💡 Aide</a></li>
+      <li><a href="#">🚪 Déconnexion</a></li>
     </ul>
-    <div class="sidebar-footer">© 2025 TI-LEX</div>
   </aside>
 
-  <!-- ====== TOPBAR ====== -->
+  <!-- TOPBAR -->
   <header class="topbar">
-    <!-- Bouton ouvrir gauche -->
-    <button class="btn-toggle" id="openBtnLeft" title="Menu gauche">☰</button>
-
+    <button class="btn-toggle" id="openBtnLeft">☰</button>
     <span class="logo">TI-LEX</span>
-
-    <!-- Bouton ouvrir droite -->
-    <div class="actions">
-      <button class="btn-toggle" id="openBtnRight" title="Outils droite" style="background:#5c7cfa;">⚙</button>
-    </div>
+    <button class="btn-toggle right" id="openBtnRight">⚙</button>
   </header>
 
-  <!-- ====== CONTENU PRINCIPAL ====== -->
-  <main class="main-content" id="mainContent">
-    <h1>👋 Bienvenue sur TI-LEX</h1>
-    <p>
-      Clique sur le bouton <strong>☰ à gauche</strong> pour ouvrir le menu de navigation,
-      ou le bouton <strong>⚙ à droite</strong> pour accéder aux outils.
-      Chaque panneau se ferme avec son bouton <strong>✕</strong> intégré.
-    </p>
-
-    <div style="margin-top: 20px;">
-      <span class="badge-panel">← Menu Gauche</span>
-      <span class="badge-panel right">Outils Droite →</span>
-    </div>
-
-    <div class="cards">
-      <div class="card"><h3>📊 Analytics</h3><p>Visualise tes données en temps réel.</p></div>
-      <div class="card"><h3>📁 Projets</h3><p>Gère tous tes projets actifs.</p></div>
-      <div class="card"><h3>💬 Messages</h3><p>Communique avec ton équipe.</p></div>
-      <div class="card"><h3>⚙️ Paramètres</h3><p>Configure ta plateforme.</p></div>
-      <div class="card"><h3>🔔 Alertes</h3><p>Reste informé en tout temps.</p></div>
-      <div class="card"><h3>🎨 Thèmes</h3><p>Personnalise l'apparence.</p></div>
-    </div>
+  <!-- CONTENU -->
+  <main class="main">
+    <h1>👋 Bienvenue</h1>
+    <p>Clique sur ☰ pour le menu gauche, ou ⚙ pour les outils à droite.</p>
   </main>
 
-  <!-- ====== JAVASCRIPT ====== -->
   <script>
-    const sidebarLeft  = document.getElementById('sidebarLeft');
-    const sidebarRight = document.getElementById('sidebarRight');
-    const overlay      = document.getElementById('overlay');
-    const openBtnLeft  = document.getElementById('openBtnLeft');
-    const openBtnRight = document.getElementById('openBtnRight');
-    const closeBtnLeft = document.getElementById('closeBtnLeft');
-    const closeBtnRight= document.getElementById('closeBtnRight');
+    const sL = document.getElementById('sidebarLeft');
+    const sR = document.getElementById('sidebarRight');
+    const ov = document.getElementById('overlay');
 
-    // ── Ouvrir gauche
-    openBtnLeft.addEventListener('click', () => {
-      closeRight();
-      sidebarLeft.classList.add('open');
-      overlay.classList.add('visible');
-    });
+    document.getElementById('openBtnLeft').onclick  = () => { closeR(); sL.classList.add('open'); ov.classList.add('visible'); };
+    document.getElementById('openBtnRight').onclick = () => { closeL(); sR.classList.add('open'); ov.classList.add('visible'); };
+    document.getElementById('closeBtnLeft').onclick  = closeL;
+    document.getElementById('closeBtnRight').onclick = closeR;
+    ov.onclick = () => { closeL(); closeR(); };
+    document.onkeydown = e => { if (e.key === 'Escape') { closeL(); closeR(); } };
 
-    // ── Ouvrir droite
-    openBtnRight.addEventListener('click', () => {
-      closeLeft();
-      sidebarRight.classList.add('open');
-      overlay.classList.add('visible');
-    });
-
-    // ── Fermer gauche (bouton ✕ interne)
-    closeBtnLeft.addEventListener('click', closeLeft);
-
-    // ── Fermer droite (bouton ✕ interne)
-    closeBtnRight.addEventListener('click', closeRight);
-
-    // ── Fermer en cliquant sur l'overlay
-    overlay.addEventListener('click', () => {
-      closeLeft();
-      closeRight();
-    });
-
-    // ── Fermer avec Echap
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') { closeLeft(); closeRight(); }
-    });
-
-    function closeLeft() {
-      sidebarLeft.classList.remove('open');
-      if (!sidebarRight.classList.contains('open')) {
-        overlay.classList.remove('visible');
-      }
-    }
-
-    function closeRight() {
-      sidebarRight.classList.remove('open');
-      if (!sidebarLeft.classList.contains('open')) {
-        overlay.classList.remove('visible');
-      }
-    }
+    function closeL() { sL.classList.remove('open'); if (!sR.classList.contains('open')) ov.classList.remove('visible'); }
+    function closeR() { sR.classList.remove('open'); if (!sL.classList.contains('open')) ov.classList.remove('visible'); }
   </script>
+
 </body>
 </html>
