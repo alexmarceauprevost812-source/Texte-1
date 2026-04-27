@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Texte-1 Codex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Caveat', cursive;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* ===== ÉCRAN INTRO ===== */
+    #intro {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity 1s ease;
+      padding-top: 30vh;
+    }
+
+    #intro.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #intro img {
+      width: 280px;
+      max-width: 80vw;
+      animation: logoPulse 4s ease-in-out;
+      filter: drop-shadow(0 0 30px #ff6600) drop-shadow(0 0 60px #ff6600);
+      z-index: 11;
+      position: relative;
+    }
+
+    @keyframes logoPulse {
+      0%   { opacity: 0; transform: scale(0.5); }
+      30%  { opacity: 1; transform: scale(1.05); }
+      70%  { opacity: 1; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ===== PAGE PRINCIPALE (non connecté) ===== */
+    #mainPage {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 30vh;
+      z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+      gap: 20px;
+    }
+
+    #mainPage.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #mainPage .main-logo {
+      width: 160px;
+      max-width: 50vw;
+      margin-bottom: 30px;
+      filter: drop-shadow(0 0 15px #ff6600);
+      animation: floatLogo 3s ease-in-out infinite;
+    }
+
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    .codex-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 3rem;
+      color: #ff6600;
+      text-shadow: 0 0 20px #ff6600, 0 0 40px #ff440055;
+      margin-bottom: 10px;
+      letter-spacing: 4px;
+    }
+
+    .codex-subtitle {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      color: #ffffff99;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 1.3rem;
+      padding: 14px 48px;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-connexion {
+      background: transparent;
+      border: 2px solid #ff6600;
+      color: #ff6600;
+    }
+
+    .btn-connexion:hover {
+      background: #ff6600;
+      color: #000;
+      box-shadow: 0 0 25px #ff6600, 0 0 50px #ff440055;
+      transform: translateY(-3px);
+    }
+
+    .btn-inscription {
+      background: #ff6600;
+      border: 2px solid #ff6600;
+      color: #000;
+      box-shadow: 0 0 15px #ff440055;
+    }
+
+    .btn-inscription:hover {
+      background: #ff8800;
+      border-color: #ff8800;
+      box-shadow: 0 0 30px #ff6600, 0 0 60px #ff440077;
+      transform: translateY(-3px);
+    }
+
+    .divider {
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #ff6600, transparent);
+      margin: 20px 0;
+    }
+
+    /* ===== BOUTON DÉCONNEXION (top right) ===== */
+    #btnDeconnexion {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 100;
+      display: none;
+      font-family: 'Permanent Marker', cursive;
+      font-size: 1rem;
+      padding: 10px 24px;
+      border-radius: 8px;
+      background: transparent;
+      border: 2px solid #ff6600;
+      color: #ff6600;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    #btnDeconnexion:hover {
+      background: #ff6600;
+      color: #000;
+      box-shadow: 0 0 20px #ff6600;
+      transform: translateY(-2px);
+    }
+
+    #btnDeconnexion.visible {
+      display: block;
+      animation: fadeInDown 0.5s ease;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== PAGE DASHBOARD (connecté) ===== */
+    #dashboard {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+    }
+
+    #dashboard.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #dashboard .welcome {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 2rem;
+      color: #ff6600;
+      text-shadow: 0 0 20px #ff6600;
+      text-align: center;
+    }
+
+    #dashboard .welcome span {
+      color: #fff;
+      font-size: 1.2rem;
+      display: block;
+      margin-top: 10px;
+      font-family: 'Caveat', cursive;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrixCanvas"></canvas>
+
+  <!-- BOUTON DÉCONNEXION (fixed top right, visible seulement si connecté) -->
+  <button id="btnDeconnexion" onclick="deconnecter()">⏻ Déconnexion</button>
+
+  <!-- INTRO -->
+  <div id="intro">
+    <img src="logo.png" alt="Texte-1 Logo" />
+  </div>
+
+  <!-- PAGE NON CONNECTÉ -->
+  <div id="mainPage">
+    <img src="logo.png" alt="Texte-1 Logo" class="main-logo" />
+    <h1 class="codex-title">TEXTE-1</h1>
+    <p class="codex-subtitle">Le Codex Vivant</p>
+    <div class="divider"></div>
+    <div class="btn-group">
+      <button class="btn btn-connexion" onclick="goTo('connexion')">Connexion</button>
+      <button class="btn btn-inscription" onclick="goTo('inscription')">Inscription</button>
+    </div>
+  </div>
+
+  <!-- PAGE CONNECTÉ -->
+  <div id="dashboard">
+    <div class="welcome">
+      Bienvenue dans le Codex !
+      <span>Le dashboard arrive bientôt... 🔥</span>
+    </div>
+  </div>
+
+  <script>
+    // ===== MATRIX =====
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()テキストコードΨΩΔΣ';
+    const fontSize = 16;
+    const columns  = Math.floor(canvas.width / fontSize);
+    const drops    = Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = fontSize + 'px monospace';
+      for (let i = 0; i < drops.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillStyle = Math.random() > 0.95 ? '#ffffff' : '#ff6600';
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+
+    const matrixInterval = setInterval(drawMatrix, 35);
+
+    window.addEventListener('resize', () => {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // ===== INTRO 4 SEC =====
+    setTimeout(() => {
+      const intro    = document.getElementById('intro');
+      const mainPage = document.getElementById('mainPage');
+      intro.classList.add('fade-out');
+      setTimeout(() => {
+        intro.style.display = 'none';
+        mainPage.classList.add('visible');
+        clearInterval(matrixInterval);
+        setInterval(drawMatrix, 80);
+      }, 1000);
+    }, 4000);
+
+    // ===== ÉTAT CONNEXION =====
+    let estConnecte = false;
+
+    function goTo(page) {
+      if (page === 'connexion') {
+        // Simule une connexion — remplacer par Supabase Auth
+        connecter('Utilisateur');
+      } else if (page === 'inscription') {
+        alert('Page inscription — à connecter à Supabase !');
+      }
+    }
+
+    function connecter(nomUser) {
+      estConnecte = true;
+      // Cache la page principale
+      const mainPage = document.getElementById('mainPage');
+      mainPage.classList.remove('visible');
+      setTimeout(() => mainPage.style.display = 'none', 500);
+
+      // Montre le dashboard
+      const dashboard = document.getElementById('dashboard');
+      dashboard.classList.add('visible');
+
+      // Montre le bouton déconnexion
+      const btnDeco = document.getElementById('btnDeconnexion');
+      btnDeco.classList.add('visible');
+    }
+
+    function deconnecter() {
+      estConnecte = false;
+      // Cache le dashboard
+      const dashboard = document.getElementById('dashboard');
+      dashboard.classList.remove('visible');
+
+      // Cache le bouton déconnexion
+      const btnDeco = document.getElementById('btnDeconnexion');
+      btnDeco.classList.remove('visible');
+
+      // Montre la page principale
+      const mainPage = document.getElementById('mainPage');
+      mainPage.style.display = 'flex';
+      setTimeout(() => mainPage.classList.add('visible'), 50);
+    }
+  </script>
+
+</body>
+</html>
