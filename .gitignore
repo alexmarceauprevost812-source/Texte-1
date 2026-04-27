@@ -1,0 +1,13 @@
+# JAMAIS COMMITTER ÇA EN CRISSE!
+.env
+*.env
+secrets.js
+config.local.js
+
+# Node
+node_modules/
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
