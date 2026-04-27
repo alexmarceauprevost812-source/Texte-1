@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CODEX — Plateforme IA</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">CODEX</span>
+      </div>
+      <button class="btn-new-chat" onclick="newChat()">＋ Nouvelle conversation</button>
+      <div class="history-label">Historique</div>
+      <ul class="history-list" id="historyList">
+        <li class="history-item active">Session actuelle</li>
+      </ul>
+      <div class="sidebar-footer">
+        <button class="btn-icon" title="Paramètres">⚙️</button>
+        <button class="btn-icon" title="Thème">🎨</button>
+        <button class="btn-icon" title="GitHub">🐙</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CHAT -->
+    <main class="chat-area">
+      <header class="chat-header">
+        <div class="model-badge">🤖 CODEX MODE</div>
+        <div class="header-actions">
+          <button class="btn-round" title="Copier tout">📋</button>
+          <button class="btn-round" title="Exporter">💾</button>
+          <button class="btn-round" title="Effacer">🗑️</button>
+        </div>
+      </header>
+
+      <!-- MESSAGES -->
+      <div class="messages" id="messages">
+        <div class="message bot">
+          <div class="avatar bot-avatar">⬡</div>
+          <div class="bubble bot-bubble">
+            <p>Salut! Chu <strong>CODEX</strong>, ton agent IA spécialisé en génération de code. Dis-moi c'est quoi tu veux bâtir pis je vais te pondre du code propre, commenté, prêt à l'emploi! 🍁</p>
+            <div class="bubble-time">Maintenant</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INPUT ZONE -->
+      <div class="input-zone">
+        <div class="input-wrapper">
+          <button class="btn-attach" title="Joindre un fichier">📎</button>
+          <textarea
+            id="userInput"
+            class="input-field"
+            placeholder="Décris le code que tu veux générer..."
+            rows="1"
+            onkeydown="handleKey(event)"
+            oninput="autoResize(this)"
+          ></textarea>
+          <div class="input-actions">
+            <select class="lang-select" id="langSelect">
+              <option value="auto">🌐 Auto</option>
+              <option value="js">JS</option>
+              <option value="py">Python</option>
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="ts">TypeScript</option>
+              <option value="sql">SQL</option>
+              <option value="php">PHP</option>
+            </select>
+            <button class="btn-send" id="sendBtn" onclick="sendMessage()">
+              <span class="send-icon">▶</span>
+            </button>
+          </div>
+        </div>
+        <div class="input-hints">
+          <span class="hint">⚡ Entrée pour envoyer</span>
+          <span class="hint">⇧ Entrée pour nouvelle ligne</span>
+          <span class="hint">🔥 Mode CODEX actif</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- STUDIO DROITE -->
+    <aside class="studio">
+      <div class="studio-header">
+        <span class="studio-title">📟 STUDIO CODE</span>
+        <div class="studio-actions">
+          <button class="btn-round" onclick="copyCode()" title="Copier">📋</button>
+          <button class="btn-round" onclick="downloadCode()" title="Télécharger">⬇️</button>
+        </div>
+      </div>
+      <div class="studio-tabs" id="studioTabs">
+        <button class="tab active">main.js</button>
+      </div>
+      <pre class="code-display" id="codeDisplay"><code id="codeContent">// Ton code apparaîtra ici automatiquement...
+// Envoie un message pour commencer!</code></pre>
+      <div class="studio-footer">
+        <span class="line-count" id="lineCount">0 lignes</span>
+        <span class="lang-badge" id="langBadge">AUTO</span>
+        <button class="btn-push" onclick="pushToGithub()">🐙 Push GitHub</button>
+      </div>
+    </aside>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
