@@ -1,147 +1,122 @@
 /);
   if (match) {
-    return { lang: match[1] || 'code', code: match[2].trim() };
+    return { lang: match[1] || 'txt', code: match[2].trim() };
   }
   return null;
 }
 
-// ── Mettre à jour le studio ───────────────────────────
-function updateStudio(lang, code) {
+// ── Afficher le code dans le studio ──────────────────
+function displayCode(lang, code) {
   codeContent.textContent = code;
+  langBadge.textContent = '💻 ' + lang.toUpperCase();
   const lines = code.split('\n').length;
-  lineCount.textContent = `${lines} ligne${lines > 1 ? 's' : ''}`;
-  langBadge.textContent = lang.toUpperCase();
+  lineCount.textContent = `📄 ${lines} ligne${lines > 1 ? 's' : ''}`;
+  if (typeof Prism !== 'undefined') {
+    codeContent.className = `language-${lang}`;
+    Prism.highlightElement(codeContent);
+  }
+  addStudioTab(lang);
+}
 
-  studioTabs.innerHTML = '';
-  const ext = langToExt(lang);
+// ── Onglets du studio ─────────────────────────────────
+function addStudioTab(lang) {
   const tab = document.createElement('button');
-  tab.className = 'tab active';
-  tab.textContent = `main.${ext}`;
+  tab.className = 'studio-tab active';
+  tab.textContent = `✨ ${lang.toUpperCase()}`;
+  studioTabs.querySelectorAll('.studio-tab').forEach(t => t.classList.remove('active'));
   studioTabs.appendChild(tab);
 }
 
-function langToExt(lang) {
-  const map = { javascript:'js', python:'py', html:'html', css:'css',
-                typescript:'ts', sql:'sql', php:'php', java:'java',
-                js:'js', py:'py', ts:'ts' };
-  return map[lang.toLowerCase()] || lang;
+// ── Historique des sessions ───────────────────────────
+function addToHistory(label) {
+  const item = document.createElement('li');
+  item.className = 'history-item';
+  item.textContent = `💬 ${label}`;
+  item.onclick = () => alert('🗂️ Reprendre cette session bientôt!');
+  historyList.prepend(item);
 }
 
-// ── Simulation réponse CODEX ──────────────────────────
+// ── Envoyer un message ────────────────────────────────
 async function sendMessage() {
   const text = userInput.value.trim();
   if (!text) return;
 
-  const lang = document.getElementById('langSelect').value;
-
   addMessage(text, 'user');
   userInput.value = '';
-  userInput.style.height = 'auto';
+  autoResize(userInput);
 
-  const sendBtn = document.getElementById('sendBtn');
-  sendBtn.disabled = true;
-  sendBtn.innerHTML = '<span style="animation:spin 0.6s linear infinite;display:inline-block">⟳</span>';
+  const thinking = document.createElement('div');
+  thinking.className = 'message bot thinking';
+  thinking.innerHTML = `
+    <div class="avatar bot-avatar">🤖</div>
+    <div class="bubble bot-bubble">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>`;
+  messages.appendChild(thinking);
+  messages.scrollTop = messages.scrollHeight;
 
-  // Ajouter à l'historique
-  addToHistory(text.substring(0, 30) + '...');
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text, session: sessionCount })
+    });
+    const data = await res.json();
+    thinking.remove();
 
-  // Simulation délai IA
-  await delay(1200);
+    const reply = data.reply || '⚠️ Aucune réponse reçue.';
+    addMessage(reply, 'bot');
 
-  const langLabel = lang === 'auto' ? 'JavaScript' : lang.toUpperCase();
-  const sampleCode = generateSampleCode(lang, text);
+    const extracted = extractCode(reply);
+    if (extracted) displayCode(extracted.lang, extracted.code);
 
-  const botReply = `Voilà! Chu CODEX pis chu venu de te générer du code <strong>${langLabel}</strong> pour "<em>${text.substring(0,40)}</em>"! Regarde dans le studio à droite 👉`;
+    if (sessionCount === 1) addToHistory(`💡 Session ${sessionCount} — ${text.slice(0, 20)}...`);
+    sessionCount++;
 
-  addMessage(botReply, 'bot');
-  updateStudio(langLabel, sampleCode);
-
-  sendBtn.disabled = false;
-  sendBtn.innerHTML = '<span class="send-icon">▶</span>';
-}
-
-// ── Générateur de code sample ─────────────────────────
-function generateSampleCode(lang, prompt) {
-  const l = lang.toLowerCase();
-  if (l === 'py' || l === 'python') {
-    return `# Généré par CODEX — ${prompt.substring(0,40)}\n\ndef main():\n    print("Salut du Québec! 🍁")\n    # TODO: Implémente ta logique ici\n    pass\n\nif __name__ == "__main__":\n    main()`;
+  } catch (err) {
+    thinking.remove();
+    addMessage('❌ Erreur de connexion au serveur. Réessaie dans un instant!', 'bot');
+    console.error('Erreur:', err);
   }
-  if (l === 'html') {
-    return `<!-- Généré par CODEX -->\n<!DOCTYPE html>\n<html lang="fr">\n<head>\n  <meta charset="UTF-8"/>\n  <title>CODEX App</title>\n</head>\n<body>\n  <h1>Salut! 🍁</h1>\n  <!-- TODO: Ton contenu ici -->\n</body>\n</html>`;
-  }
-  if (l === 'css') {
-    return `/* Généré par CODEX */\n:root {\n  --primary: #ff6b00;\n  --bg: #0a0a0a;\n  --text: #f0f0f0;\n}\n\nbody {\n  background: var(--bg);\n  color: var(--text);\n  font-family: monospace;\n}`;
-  }
-  // Default JS
-  return `// Généré par CODEX — ${prompt.substring(0,40)}\n\n/**\n * @description ${prompt}\n */\nfunction codexSolution() {\n  // 🍁 Logique principale\n  console.log("CODEX en action!");\n  \n  // TODO: Implémente ta solution ici\n  return null;\n}\n\ncodexSolution();`;
-}
-
-// ── Historique ────────────────────────────────────────
-function addToHistory(label) {
-  const li = document.createElement('li');
-  li.className = 'history-item';
-  li.textContent = label;
-  li.onclick = () => {
-    document.querySelectorAll('.history-item').forEach(i => i.classList.remove('active'));
-    li.classList.add('active');
-  };
-  historyList.insertBefore(li, historyList.firstChild);
-}
-
-// ── Nouvelle conversation ─────────────────────────────
-function newChat() {
-  messages.innerHTML = '';
-  sessionCount++;
-  addMessage(`Nouvelle session #${sessionCount} — Prêt à coder! Dis-moi c'est quoi ton projet 🍁`, 'bot');
-  codeContent.textContent = '// Nouvelle session — En attente de code...';
-  lineCount.textContent = '0 lignes';
 }
 
 // ── Copier le code ────────────────────────────────────
 function copyCode() {
-  navigator.clipboard.writeText(codeContent.textContent)
-    .then(() => showToast('Code copié! 📋'))
-    .catch(() => showToast('Erreur de copie'));
+  const code = codeContent.textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    showToast('✅ Code copié dans le presse-papier!');
+  });
 }
 
 // ── Télécharger le code ───────────────────────────────
 function downloadCode() {
-  const ext = langBadge.textContent.toLowerCase();
-  const blob = new Blob([codeContent.textContent], { type: 'text/plain' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `codex-output.${ext}`;
+  const code = codeContent.textContent;
+  const lang = langBadge.textContent.replace('💻 ', '').toLowerCase();
+  const blob = new Blob([code], { type: 'text/plain' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `code-tilexal.${lang}`;
   a.click();
-  showToast('Fichier téléchargé! 💾');
-}
-
-// ── Push GitHub (placeholder) ─────────────────────────
-function pushToGithub() {
-  showToast('🐙 Push vers GitHub en cours...');
-  setTimeout(() => showToast('✅ Poussé sur texte-1!'), 2000);
+  URL.revokeObjectURL(url);
+  showToast('📥 Fichier téléchargé!');
 }
 
 // ── Toast notification ────────────────────────────────
 function showToast(msg) {
   const toast = document.createElement('div');
-  toast.style.cssText = `
-    position:fixed; bottom:30px; right:30px;
-    background:var(--orange); color:#000;
-    padding:10px 20px; border-radius:20px;
-    font-family:var(--font-mono); font-size:0.85rem;
-    font-weight:bold; z-index:9999;
-    animation: fadeUp 0.3s ease;
-    box-shadow: 0 4px 20px rgba(255,107,0,0.4);
-  `;
+  toast.className = 'toast';
   toast.textContent = msg;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
 }
 
-// ── Utils ─────────────────────────────────────────────
-function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+// ── Nouvelle conversation ─────────────────────────────
+function newChat() {
+  messages.innerHTML = '';
+  addMessage('🍁 Nouvelle conversation démarrée! Comment puis-je t\'aider?', 'bot');
+  sessionCount++;
+}
 
-// ── CSS animation spin ────────────────────────────────
-const style = document.createElement('style');
-style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
-document.head.appendChild(style);
+// ── Init ──────────────────────────────────────────────
+addMessage('👋 Salut! Chu TI-LEX-AL, ton agent IA québécois. Pose-moi n\'importe quelle question!', 'bot');
