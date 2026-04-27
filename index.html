@@ -3,138 +3,397 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CODEX — Plateforme IA</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <title>Menus Gauche & Droite</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #f0f0f0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== TOPBAR ===== */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: #1a1a2e;
+      border-bottom: 2px solid #e94560;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 1000;
+    }
+
+    .topbar .logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #e94560;
+      letter-spacing: 2px;
+    }
+
+    .topbar .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* ===== BOUTON HAMBURGER ===== */
+    .btn-toggle {
+      background: #e94560;
+      border: none;
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-toggle:hover {
+      background: #c73652;
+      transform: scale(1.08);
+    }
+
+    /* ===== OVERLAY ===== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ===== SIDEBAR GAUCHE ===== */
+    .sidebar-left {
+      position: fixed;
+      top: 0; left: 0;
+      width: 270px;
+      height: 100%;
+      background: #16213e;
+      border-right: 2px solid #e94560;
+      z-index: 1100;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-left.open {
+      transform: translateX(0);
+    }
+
+    /* ===== SIDEBAR DROITE ===== */
+    .sidebar-right {
+      position: fixed;
+      top: 0; right: 0;
+      width: 270px;
+      height: 100%;
+      background: #1a1a2e;
+      border-left: 2px solid #0f3460;
+      z-index: 1100;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-right.open {
+      transform: translateX(0);
+    }
+
+    /* ===== SIDEBAR HEADER ===== */
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-header h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #e94560;
+    }
+    .sidebar-right .sidebar-header h2 {
+      color: #0f3460;
+      color: #5c7cfa;
+    }
+
+    /* ===== BOUTON FERMER ===== */
+    .btn-close-sidebar {
+      background: transparent;
+      border: 2px solid rgba(255,255,255,0.2);
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      line-height: 1;
+    }
+    .btn-close-sidebar:hover {
+      background: #e94560;
+      border-color: #e94560;
+      transform: rotate(90deg);
+    }
+    .sidebar-right .btn-close-sidebar:hover {
+      background: #5c7cfa;
+      border-color: #5c7cfa;
+    }
+
+    /* ===== SIDEBAR NAV LIENS ===== */
+    .sidebar-nav {
+      list-style: none;
+      padding: 16px 0;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .sidebar-nav li a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 24px;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.95rem;
+      border-left: 3px solid transparent;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .sidebar-nav li a:hover {
+      background: rgba(233, 69, 96, 0.12);
+      color: #fff;
+      border-left-color: #e94560;
+    }
+    .sidebar-right .sidebar-nav li a:hover {
+      background: rgba(92, 124, 250, 0.12);
+      border-left-color: #5c7cfa;
+      border-left: none;
+      border-right: 3px solid #5c7cfa;
+    }
+    .sidebar-nav li a .icon { font-size: 1.1rem; }
+
+    /* ===== SIDEBAR FOOTER ===== */
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+    }
+
+    /* ===== CONTENU PRINCIPAL ===== */
+    .main-content {
+      margin-top: 56px;
+      padding: 40px 30px;
+      transition: margin 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: calc(100vh - 56px);
+    }
+
+    .main-content h1 {
+      font-size: 2rem;
+      color: #e94560;
+      margin-bottom: 16px;
+    }
+    .main-content p {
+      color: #999;
+      line-height: 1.7;
+      max-width: 600px;
+    }
+
+    /* Indicateur visuel panneaux ouverts */
+    .badge-panel {
+      display: inline-block;
+      background: #e94560;
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin: 6px 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .badge-panel.right { background: #5c7cfa; }
+
+    /* ===== CARDS DEMO ===== */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      margin-top: 30px;
+    }
+    .card {
+      background: #16213e;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 22px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #e94560;
+    }
+    .card h3 { font-size: 0.9rem; color: #e94560; margin-bottom: 8px; }
+    .card p  { font-size: 0.82rem; color: #888; }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #e94560; border-radius: 3px; }
+  </style>
 </head>
 <body>
-  <div class="app">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="logo">
-        <span class="logo-icon">⬡</span>
-        <span class="logo-text">CODEX</span>
-      </div>
+  <!-- OVERLAY -->
+  <div class="overlay" id="overlay"></div>
 
-      <button class="btn-new-chat" onclick="newChat()">＋ Nouvelle conversation</button>
+  <!-- ====== SIDEBAR GAUCHE ====== -->
+  <aside class="sidebar-left" id="sidebarLeft">
+    <div class="sidebar-header">
+      <h2>📂 Menu</h2>
+      <button class="btn-close-sidebar" id="closeBtnLeft" title="Fermer">✕</button>
+    </div>
+    <ul class="sidebar-nav">
+      <li><a href="#"><span class="icon">🏠</span> Accueil</a></li>
+      <li><a href="#"><span class="icon">📊</span> Tableau de bord</a></li>
+      <li><a href="#"><span class="icon">📁</span> Projets</a></li>
+      <li><a href="#"><span class="icon">📝</span> Documents</a></li>
+      <li><a href="#"><span class="icon">💬</span> Messages</a></li>
+      <li><a href="#"><span class="icon">⭐</span> Favoris</a></li>
+      <li><a href="#"><span class="icon">🗂️</span> Archives</a></li>
+      <li><a href="#"><span class="icon">📅</span> Calendrier</a></li>
+      <li><a href="#"><span class="icon">⚙️</span> Paramètres</a></li>
+    </ul>
+    <div class="sidebar-footer">TI-LEX Platform v1.0</div>
+  </aside>
 
-      <!-- AGENTS -->
-      <div class="history-label">🤖 Agents</div>
-      <div class="agent-list">
-        <button class="agent-btn active" onclick="selectAgent('ti-codex')" id="agent-ti-codex">
-          <span class="agent-icon">😈</span>
-          <div class="agent-info">
-            <span class="agent-name">TI-CODEX</span>
-            <span class="agent-desc">Le crisse de drôle</span>
-          </div>
-        </button>
-        <button class="agent-btn" onclick="selectAgent('ti-coder')" id="agent-ti-coder">
-          <span class="agent-icon">🛠️</span>
-          <div class="agent-info">
-            <span class="agent-name">TI-CODER</span>
-            <span class="agent-desc">Expert code & gros dossiers</span>
-          </div>
-        </button>
-      </div>
+  <!-- ====== SIDEBAR DROITE ====== -->
+  <aside class="sidebar-right" id="sidebarRight">
+    <div class="sidebar-header">
+      <button class="btn-close-sidebar" id="closeBtnRight" title="Fermer">✕</button>
+      <h2>🔧 Outils</h2>
+    </div>
+    <ul class="sidebar-nav">
+      <li><a href="#"><span class="icon">🔔</span> Notifications</a></li>
+      <li><a href="#"><span class="icon">👤</span> Profil</a></li>
+      <li><a href="#"><span class="icon">🎨</span> Thèmes</a></li>
+      <li><a href="#"><span class="icon">🔗</span> Intégrations</a></li>
+      <li><a href="#"><span class="icon">🛡️</span> Sécurité</a></li>
+      <li><a href="#"><span class="icon">📱</span> Mobile</a></li>
+      <li><a href="#"><span class="icon">💡</span> Aide</a></li>
+      <li><a href="#"><span class="icon">🚪</span> Déconnexion</a></li>
+    </ul>
+    <div class="sidebar-footer">© 2025 TI-LEX</div>
+  </aside>
 
-      <!-- PROJETS -->
-      <div class="history-label">📁 Projets</div>
-      <div class="project-list" id="projectList">
-        <div class="project-empty">Aucun projet — clique ＋</div>
-      </div>
-      <button class="btn-project-add" onclick="openProjectModal()">＋ Connecter un projet</button>
+  <!-- ====== TOPBAR ====== -->
+  <header class="topbar">
+    <!-- Bouton ouvrir gauche -->
+    <button class="btn-toggle" id="openBtnLeft" title="Menu gauche">☰</button>
 
-      <!-- HISTORIQUE -->
-      <div class="history-label">📂 Historique</div>
-      <ul class="history-list" id="historyList">
-        <li class="history-item active">💬 Session actuelle</li>
-      </ul>
+    <span class="logo">TI-LEX</span>
 
-      <div class="sidebar-footer">
-        <button class="btn-icon" title="Paramètres"  onclick="openSettings()">⚙️</button>
-        <button class="btn-icon" title="Thème"       onclick="toggleTheme()" id="themeBtn">🌙</button>
-        <button class="btn-icon" title="Clé API"     onclick="openApiModal()">🔑</button>
-        <button class="btn-icon" title="GitHub"      onclick="pushToGithub()">🐙</button>
-      </div>
-    </aside>
+    <!-- Bouton ouvrir droite -->
+    <div class="actions">
+      <button class="btn-toggle" id="openBtnRight" title="Outils droite" style="background:#5c7cfa;">⚙</button>
+    </div>
+  </header>
 
-    <!-- MAIN CHAT -->
-    <main class="chat-area">
-      <header class="chat-header">
-        <div class="model-badge" id="agentBadge">😈 TI-CODEX</div>
-        <div class="header-actions">
-          <button class="btn-round" title="Copier tout"  onclick="copyAll()">📋</button>
-          <button class="btn-round" title="Exporter"     onclick="exportChat()">💾</button>
-          <button class="btn-round" title="Effacer"      onclick="clearChat()">🗑️</button>
-        </div>
-      </header>
+  <!-- ====== CONTENU PRINCIPAL ====== -->
+  <main class="main-content" id="mainContent">
+    <h1>👋 Bienvenue sur TI-LEX</h1>
+    <p>
+      Clique sur le bouton <strong>☰ à gauche</strong> pour ouvrir le menu de navigation,
+      ou le bouton <strong>⚙ à droite</strong> pour accéder aux outils.
+      Chaque panneau se ferme avec son bouton <strong>✕</strong> intégré.
+    </p>
 
-      <div class="messages" id="messages">
-        <div class="message bot">
-          <div class="avatar bot-avatar">😈</div>
-          <div class="bubble bot-bubble">
-            <p>Ey tabanak! Chu <strong>TI-CODEX</strong>, ton agent IA le plus flyé du Québec! Dis-moi c'est quoi tu veux bâtir — pis configure ta clé API avec le bouton 🔑 pour que j'arrête de parler dans le vide, crisse! 🍁</p>
-            <div class="bubble-time">✨ Maintenant</div>
-          </div>
-        </div>
-      </div>
+    <div style="margin-top: 20px;">
+      <span class="badge-panel">← Menu Gauche</span>
+      <span class="badge-panel right">Outils Droite →</span>
+    </div>
 
-      <div class="input-zone">
-        <div class="input-wrapper">
-          <button class="btn-attach" title="Joindre fichier / ZIP" onclick="attachFile()">📎</button>
-          <textarea
-            id="userInput"
-            class="input-field"
-            placeholder="✏️ Décris le code que tu veux générer..."
-            rows="1"
-            onkeydown="handleKey(event)"
-            oninput="autoResize(this)"
-          ></textarea>
-          <div class="input-actions">
-            <select class="lang-select" id="langSelect">
-              <option value="auto">🌐 Auto</option>
-              <option value="js">⚡ JS</option>
-              <option value="py">🐍 Python</option>
-              <option value="html">🌐 HTML</option>
-              <option value="css">🎨 CSS</option>
-              <option value="ts">📘 TypeScript</option>
-              <option value="sql">🗄️ SQL</option>
-              <option value="php">🐘 PHP</option>
-            </select>
-            <button class="btn-send" id="sendBtn" onclick="sendMessage()">🚀</button>
-          </div>
-        </div>
-        <div class="input-hints">
-          <span class="hint">⚡ Entrée pour envoyer</span>
-          <span class="hint">⇧ Entrée pour nouvelle ligne</span>
-          <span class="hint" id="agentHint">😈 TI-CODEX actif</span>
-        </div>
-      </div>
-    </main>
+    <div class="cards">
+      <div class="card"><h3>📊 Analytics</h3><p>Visualise tes données en temps réel.</p></div>
+      <div class="card"><h3>📁 Projets</h3><p>Gère tous tes projets actifs.</p></div>
+      <div class="card"><h3>💬 Messages</h3><p>Communique avec ton équipe.</p></div>
+      <div class="card"><h3>⚙️ Paramètres</h3><p>Configure ta plateforme.</p></div>
+      <div class="card"><h3>🔔 Alertes</h3><p>Reste informé en tout temps.</p></div>
+      <div class="card"><h3>🎨 Thèmes</h3><p>Personnalise l'apparence.</p></div>
+    </div>
+  </main>
 
-    <!-- STUDIO DROITE -->
-    <aside class="studio">
-      <div class="studio-header">
-        <span class="studio-title">📟 STUDIO CODE</span>
-        <div class="studio-actions">
-          <button class="btn-round" onclick="copyCode()"     title="Copier">📋</button>
-          <button class="btn-round" onclick="downloadCode()" title="Télécharger">⬇️</button>
-        </div>
-      </div>
-      <div class="studio-tabs" id="studioTabs">
-        <button class="tab active">📄 main.js</button>
-      </div>
-      <pre class="code-display" id="codeDisplay"><code id="codeContent">// ✏️ Ton code apparaîtra ici...
-// 🚀 Configure ta clé API pis envoie un message!</code></pre>
-      <div class="studio-footer">
-        <span class="line-count" id="lineCount">📄 0 lignes</span>
-        <span class="lang-badge" id="langBadge">🌐 AUTO</span>
-        <button class="btn-push" onclick="pushToGithub()">🐙 Push GitHub</button>
-      </div>
-    </aside>
+  <!-- ====== JAVASCRIPT ====== -->
+  <script>
+    const sidebarLeft  = document.getElementById('sidebarLeft');
+    const sidebarRight = document.getElementById('sidebarRight');
+    const overlay      = document.getElementById('overlay');
+    const openBtnLeft  = document.getElementById('openBtnLeft');
+    const openBtnRight = document.getElementById('openBtnRight');
+    const closeBtnLeft = document.getElementById('closeBtnLeft');
+    const closeBtnRight= document.getElementById('closeBtnRight');
 
-  </div>
-  <script src="app.js"></script>
+    // ── Ouvrir gauche
+    openBtnLeft.addEventListener('click', () => {
+      closeRight();
+      sidebarLeft.classList.add('open');
+      overlay.classList.add('visible');
+    });
+
+    // ── Ouvrir droite
+    openBtnRight.addEventListener('click', () => {
+      closeLeft();
+      sidebarRight.classList.add('open');
+      overlay.classList.add('visible');
+    });
+
+    // ── Fermer gauche (bouton ✕ interne)
+    closeBtnLeft.addEventListener('click', closeLeft);
+
+    // ── Fermer droite (bouton ✕ interne)
+    closeBtnRight.addEventListener('click', closeRight);
+
+    // ── Fermer en cliquant sur l'overlay
+    overlay.addEventListener('click', () => {
+      closeLeft();
+      closeRight();
+    });
+
+    // ── Fermer avec Echap
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeLeft(); closeRight(); }
+    });
+
+    function closeLeft() {
+      sidebarLeft.classList.remove('open');
+      if (!sidebarRight.classList.contains('open')) {
+        overlay.classList.remove('visible');
+      }
+    }
+
+    function closeRight() {
+      sidebarRight.classList.remove('open');
+      if (!sidebarLeft.classList.contains('open')) {
+        overlay.classList.remove('visible');
+      }
+    }
+  </script>
 </body>
 </html>
