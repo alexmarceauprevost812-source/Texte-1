@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>🧠 Mon Codex JS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 🔝 NAVBAR -->
+  <nav class="navbar">
+    <h1>🍁 Mon Codex JS</h1>
+    <button id="btnConnexion" onclick="ouvrirModal()">🔐 Se connecter</button>
+  </nav>
+
+  <!-- 🪟 MODAL DE CONNEXION -->
+  <div id="modalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+      <button class="fermer" onclick="fermerModal()">✕</button>
+      <h2>🔐 Connexion</h2>
+
+      <div class="form-group">
+        <label>📧 Courriel</label>
+        <input type="email" id="courriel" placeholder="toi@example.com">
+      </div>
+
+      <div class="form-group">
+        <label>🔑 Mot de passe</label>
+        <input type="password" id="motdepasse" placeholder="••••••••">
+      </div>
+
+      <p id="erreurMsg" class="erreur hidden">❌ Courriel ou mot de passe incorrect!</p>
+
+      <button class="btn-login" onclick="seConnecter()">🚀 Connexion</button>
+
+      <p class="lien-register">Pas encore de compte? 
+        <a href="#" onclick="afficherInscription()">S'inscrire</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- 🔔 TOAST NOTIFICATION -->
+  <div id="toast" class="toast hidden">✅ Connexion réussie! Allô!</div>
+
+  <!-- HEADER SEARCH -->
+  <header>
+    <input type="text" id="recherche" placeholder="Cherche un code...">
+  </header>
+
+  <main id="resultats"></main>
+
+  <script src="codex.js"></script>
+</body>
+</html>
