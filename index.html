@@ -1,746 +1,194 @@
-# AWEILLE! 🤙 On repart de ZÉRO — FULL MALADE! 🍁
-
-Câline, chu parti! On fait toute en **UN SEUL FICHIER** pour commencer — `index.html` complet avec toute intégré! Attache ta tuque mon chum! 🔥
-
----
-
-## 📄 `index.html` — PAGE D'ACCUEIL COMPLÈTE
-
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TI-CODEX 🍁</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
-
-    *{margin:0;padding:0;box-sizing:border-box;}
-
-    :root {
-      --lime:   #a6e300;
-      --orange: #ff8c00;
-      --noir:   #080808;
-      --gris:   #111111;
-    }
-
-    body {
-      font-family: 'Share Tech Mono', monospace;
-      background: var(--noir);
-      color: var(--lime);
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-
-    /* ========== MATRIX CANVAS ========== */
-    #matrixCanvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      opacity: 0.18;
-      pointer-events: none;
-    }
-
-    /* ========== NAVBAR ========== */
-    .navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 60px;
-      background: rgba(8,8,8,0.92);
-      border-bottom: 1px solid rgba(166,227,0,0.2);
-      backdrop-filter: blur(12px);
-    }
-
-    .logo {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.4rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      cursor: pointer;
-    }
-    .logo .ti    { color: var(--lime); text-shadow: 0 0 15px rgba(166,227,0,0.8); }
-    .logo .codex { color: var(--orange); text-shadow: 0 0 15px rgba(255,140,0,0.8); }
-
-    .nav-links { display: flex; gap: 40px; align-items: center; }
-
-    .nav-link {
-      color: rgba(166,227,0,0.55);
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      transition: color 0.3s;
-      cursor: pointer;
-    }
-    .nav-link:hover { color: var(--orange); }
-
-    /* ========== HERO ========== */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 120px 80px 60px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-content { flex: 1; max-width: 580px; }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(255,140,0,0.1);
-      border: 1px solid rgba(255,140,0,0.4);
-      color: var(--orange);
-      padding: 6px 18px;
-      font-size: 10px;
-      letter-spacing: 3px;
-      margin-bottom: 30px;
-      animation: pulse 3s infinite;
-    }
-
-    @keyframes pulse {
-      0%,100% { box-shadow: 0 0 0 rgba(255,140,0,0.3); }
-      50%      { box-shadow: 0 0 20px rgba(255,140,0,0.2); }
-    }
-
-    .hero-titre {
-      font-family: 'Orbitron', monospace;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 25px;
-    }
-
-    .titre-small {
-      display: block;
-      font-size: 1.2rem;
-      color: rgba(166,227,0,0.5);
-      letter-spacing: 10px;
-    }
-
-    .titre-big {
-      display: block;
-      font-size: 5.5rem;
-      color: var(--lime);
-      letter-spacing: 5px;
-      text-shadow:
-        0 0 20px rgba(166,227,0,0.7),
-        0 0 60px rgba(166,227,0,0.2),
-        4px 4px 0 rgba(166,227,0,0.12);
-      animation: glitch 6s infinite;
-    }
-
-    @keyframes glitch {
-      0%,88%,100% { text-shadow: 0 0 20px rgba(166,227,0,0.7), 4px 4px 0 rgba(166,227,0,0.12); }
-      90% { text-shadow: -4px 0 var(--orange), 4px 0 var(--lime); transform: translateX(3px); }
-      91% { text-shadow: 4px 0 var(--orange), -4px 0 var(--lime); transform: translateX(-3px); }
-      92% { text-shadow: 0 0 20px rgba(166,227,0,0.7); transform: none; }
-    }
-
-    .titre-sub {
-      display: block;
-      font-size: 1.6rem;
-      color: var(--orange);
-      letter-spacing: 14px;
-      text-shadow: 0 0 15px rgba(255,140,0,0.6);
-    }
-
-    .hero-desc {
-      font-size: 14px;
-      color: rgba(166,227,0,0.55);
-      line-height: 1.9;
-      margin-bottom: 35px;
-      letter-spacing: 1px;
-    }
-
-    .hero-desc .oj { color: var(--orange); }
-
-    /* Stats */
-    .stats {
-      display: flex;
-      gap: 25px;
-      align-items: center;
-      margin-bottom: 45px;
-    }
-    .stat { text-align: center; }
-    .stat-n {
-      display: block;
-      font-family: 'Orbitron', monospace;
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: var(--lime);
-      text-shadow: 0 0 12px rgba(166,227,0,0.6);
-    }
-    .stat-l {
-      display: block;
-      font-size: 9px;
-      color: rgba(255,140,0,0.7);
-      letter-spacing: 2px;
-    }
-    .stat-sep { color: rgba(166,227,0,0.2); font-size: 1.8rem; }
-
-    /* ========== BOUTONS 3D ========== */
-    .btns { display: flex; gap: 22px; flex-wrap: wrap; }
-
-    .btn3d {
-      position: relative;
-      border: none;
-      cursor: pointer;
-      outline: none;
-      font-family: 'Orbitron', monospace;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-radius: 6px;
-      transition: filter 0.3s;
-    }
-
-    .btn3d-face {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 17px 35px;
-      border-radius: 6px;
-      font-size: 14px;
-      position: relative;
-      z-index: 2;
-      transition: transform 0.1s;
-    }
-
-    .btn3d-shadow {
-      position: absolute;
-      bottom: -7px; left: 0;
-      width: 100%; height: 100%;
-      border-radius: 6px;
-      z-index: 1;
-      transition: bottom 0.1s;
-    }
-
-    .btn3d:active .btn3d-face { transform: translateY(6px); }
-    .btn3d:active .btn3d-shadow { bottom: -1px; }
-
-    /* Vert lime */
-    .btn-conn .btn3d-face {
-      background: var(--lime);
-      color: var(--noir);
-      box-shadow: 0 0 25px rgba(166,227,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25);
-    }
-    .btn-conn .btn3d-shadow { background: #5a7a00; }
-    .btn-conn:hover .btn3d-face {
-      background: #c4f000;
-      box-shadow: 0 0 40px rgba(166,227,0,0.8), 0 0 80px rgba(166,227,0,0.3);
-    }
-    .btn-conn:hover { filter: brightness(1.1); }
-
-    /* Orange */
-    .btn-reg .btn3d-face {
-      background: transparent;
-      color: var(--orange);
-      border: 2px solid var(--orange);
-      box-shadow: 0 0 20px rgba(255,140,0,0.35), inset 0 0 15px rgba(255,140,0,0.06);
-    }
-    .btn-reg .btn3d-shadow { background: #7a3d00; }
-    .btn-reg:hover .btn3d-face {
-      background: rgba(255,140,0,0.12);
-      color: #ffaa33;
-      border-color: #ffaa33;
-      box-shadow: 0 0 40px rgba(255,140,0,0.7), 0 0 80px rgba(255,140,0,0.25);
-    }
-
-    /* ========== CARTE DÉCO CODE ========== */
-    .hero-deco {
-      flex: 0 0 430px;
-      position: relative;
-      z-index: 1;
-      animation: float 4s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%,100% { transform: translateY(0) rotateY(-4deg); }
-      50%      { transform: translateY(-18px) rotateY(4deg); }
-    }
-
-    .code-card {
-      background: rgba(5,5,5,0.96);
-      border: 1px solid rgba(166,227,0,0.2);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow:
-        0 0 40px rgba(166,227,0,0.08),
-        0 30px 60px rgba(0,0,0,0.9);
-    }
-
-    .code-header {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 12px 18px;
-      background: rgba(166,227,0,0.04);
-      border-bottom: 1px solid rgba(166,227,0,0.12);
-    }
-
-    .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
-    .dot.r { background: #ff5f57; }
-    .dot.y { background: #febc2e; }
-    .dot.g { background: #28c840; }
-    .code-fn { margin-left: 8px; color: rgba(166,227,0,0.35); font-size: 11px; }
-
-    .code-body {
-      padding: 22px 25px;
-      font-size: 13px;
-      line-height: 1.9;
-    }
-
-    .co { color: var(--orange); }
-    .cv { color: var(--lime); }
-    .cs { color: #c8f07a; }
-    .cc { color: rgba(166,227,0,0.3); }
-    .cur { animation: blink 1s step-end infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-    /* ========== FEATURES ========== */
-    .features {
-      padding: 80px;
-      border-top: 1px solid rgba(166,227,0,0.08);
-      position: relative;
-      z-index: 1;
-    }
-
-    .sect-titre {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: rgba(166,227,0,0.6);
-      letter-spacing: 5px;
-      text-align: center;
-      margin-bottom: 50px;
-    }
-    .sect-titre span { color: var(--orange); text-shadow: 0 0 15px rgba(255,140,0,0.5); }
-
-    .feat-grid {
-      display: grid;
-      grid-template-columns: repeat(4,1fr);
-      gap: 22px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .feat-card {
-      background: rgba(10,10,10,0.85);
-      border: 1px solid rgba(166,227,0,0.12);
-      border-bottom: 3px solid var(--lime);
-      border-radius: 6px;
-      padding: 30px 22px;
-      text-align: center;
-      transition: all 0.3s;
-      cursor: default;
-    }
-
-    .feat-card:hover {
-      transform: translateY(-8px);
-      border-bottom-color: var(--orange);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 25px rgba(166,227,0,0.07);
-    }
-
-    .feat-ico { font-size: 2.2rem; margin-bottom: 14px; display: block; }
-    .feat-card h3 {
-      font-family: 'Orbitron', monospace;
-      color: var(--orange);
-      font-size: 0.75rem;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-    }
-    .feat-card p { color: rgba(166,227,0,0.5); font-size: 12px; line-height: 1.7; }
-
-    /* ========== MODALS ========== */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.9);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 500;
-      backdrop-filter: blur(8px);
-    }
-
-    .modal {
-      background: var(--noir);
-      border: 1px solid rgba(166,227,0,0.25);
-      border-top: 3px solid var(--orange);
-      border-radius: 8px;
-      padding: 45px 42px;
-      width: 100%;
-      max-width: 440px;
-      position: relative;
-      animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-      box-shadow: 0 0 80px rgba(166,227,0,0.08), 0 0 160px rgba(255,140,0,0.04);
-    }
-
-    @keyframes popIn {
-      from { transform: translateY(-40px) scale(0.94); opacity: 0; }
-      to   { transform: translateY(0) scale(1); opacity: 1; }
-    }
-
-    .modal-badge {
-      display: inline-block;
-      border: 1px solid rgba(255,140,0,0.35);
-      background: rgba(255,140,0,0.08);
-      color: var(--orange);
-      padding: 4px 14px;
-      font-size: 9px;
-      letter-spacing: 3px;
-      margin-bottom: 14px;
-    }
-
-    .modal-badge.lime {
-      border-color: rgba(166,227,0,0.35);
-      background: rgba(166,227,0,0.08);
-      color: var(--lime);
-    }
-
-    .modal h2 {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.2rem;
-      letter-spacing: 4px;
-      color: var(--lime);
-      margin-bottom: 28px;
-    }
-
-    .modal h2.orange { color: var(--orange); text-shadow: 0 0 15px rgba(255,140,0,0.5); }
-
-    .btn-fermer {
-      position: absolute;
-      top: 16px; right: 18px;
-      background: none;
-      border: none;
-      color: var(--orange);
-      font-size: 20px;
-      cursor: pointer;
-      font-family: 'Share Tech Mono', monospace;
-      transition: all 0.2s;
-    }
-    .btn-fermer:hover { color: var(--lime); transform: rotate(90deg); }
-
-    .fg { margin-bottom: 18px; }
-    .fg label {
-      display: block;
-      color: var(--orange);
-      font-size: 11px;
-      letter-spacing: 2px;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-    .fg input {
-      width: 100%;
-      padding: 13px 15px;
-      background: #050505;
-      border: 1px solid rgba(166,227,0,0.3);
-      border-radius: 3px;
-      color: var(--lime);
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 14px;
-      transition: all 0.3s;
-    }
-    .fg input:focus {
-      outline: none;
-      border-color: var(--orange);
-      box-shadow: 0 0 12px rgba(255,140,0,0.25);
-      color: var(--orange);
-    }
-
-    /* Boutons dans modal */
-    .btn-modal {
-      width: 100%;
-      padding: 14px;
-      font-family: 'Orbitron', monospace;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: all 0.2s;
-      position: relative;
-    }
-
-    .btn-modal.lime {
-      background: var(--lime);
-      color: var(--noir);
-      box-shadow: 0 6px 0 #5a7a00, 0 0 20px rgba(166,227,0,0.4);
-    }
-    .btn-modal.lime:hover {
-      box-shadow: 0 6px 0 #5a7a00, 0 0 35px rgba(166,227,0,0.7);
-      background: #c4f000;
-    }
-    .btn-modal.lime:active { transform: translateY(4px); box-shadow: 0 2px 0 #5a7a00; }
-
-    .btn-modal.orange {
-      background: transparent;
-      color: var(--orange);
-      border: 2px solid var(--orange);
-      box-shadow: 0 6px 0 #7a3d00, 0 0 20px rgba(255,140,0,0.3);
-    }
-    .btn-modal.orange:hover { box-shadow: 0 6px 0 #7a3d00, 0 0 35px rgba(255,140,0,0.6); }
-    .btn-modal.orange:active { transform: translateY(4px); box-shadow: 0 2px 0 #7a3d00; }
-
-    .erreur {
-      color: #ff4444;
-      font-size: 12px;
-      text-align: center;
-      margin: 8px 0;
-      letter-spacing: 1px;
-      text-shadow: 0 0 8px rgba(255,68,68,0.5);
-    }
-
-    .switch-link {
-      text-align: center;
-      color: rgba(166,227,0,0.4);
-      font-size: 12px;
-      margin-top: 18px;
-      letter-spacing: 1px;
-    }
-    .switch-link a {
-      color: var(--orange);
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .switch-link a:hover { text-shadow: 0 0 10px rgba(255,140,0,0.8); }
-
-    /* ========== TOAST ========== */
-    .toast {
-      position: fixed;
-      bottom: 30px; right: 30px;
-      background: var(--noir);
-      border: 1px solid var(--lime);
-      border-left: 4px solid var(--orange);
-      color: var(--lime);
-      padding: 15px 22px;
-      border-radius: 4px;
-      font-size: 13px;
-      letter-spacing: 1px;
-      z-index: 9999;
-      box-shadow: 0 0 25px rgba(166,227,0,0.15);
-      animation: slideUp 0.3s ease;
-    }
-    @keyframes slideUp {
-      from { opacity:0; transform: translateY(15px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-
-    .hidden { display: none !important; }
-
-    /* ========== RESPONSIVE ========== */
-    @media(max-width:900px) {
-      .hero { flex-direction: column; padding: 100px 30px 50px; gap: 50px; }
-      .hero-deco { flex: unset; width: 100%; max-width: 400px; }
-      .titre-big { font-size: 3.5rem; }
-      .feat-grid { grid-template-columns: repeat(2,1fr); }
-      .navbar { padding: 15px 25px; }
-      .features { padding: 50px 30px; }
-    }
-
-    @media(max-width:500px) {
-      .feat-grid { grid-template-columns: 1fr; }
-      .btns { flex-direction: column; }
-      .btn3d-face { padding: 15px 25px; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/accueil.css">
 </head>
 <body>
 
-<!-- ========== MATRIX BG ========== -->
-<canvas id="matrixCanvas"></canvas>
+  <!-- ====== MATRIX CANVAS ====== -->
+  <canvas id="matrix"></canvas>
 
-<!-- ========== NAVBAR ========== -->
-<nav class="navbar">
-  <div class="logo">
-    <span class="ti">TI</span><span class="codex">-CODEX</span>
-  </div>
-  <div class="nav-links">
-    <a class="nav-link">ACCUEIL</a>
-    <a class="nav-link" onclick="ouvrirConnexion()">CONNEXION</a>
-    <a class="nav-link" onclick="ouvrirInscription()">INSCRIPTION</a>
-  </div>
-</nav>
+  <!-- ====== NAVBAR ====== -->
+  <nav class="navbar">
+    <div class="logo">
+      <span class="l1">TI</span><span class="l2">-CODEX</span>
+    </div>
+    <div class="nav-liens">
+      <a href="#features">FEATURES</a>
+      <a href="#" onclick="ouvrirConnexion()">CONNEXION</a>
+    </div>
+  </nav>
 
-<!-- ========== HERO ========== -->
-<section class="hero">
-  <div class="hero-content">
+  <!-- ====== HERO ====== -->
+  <section class="hero">
+    <div class="hero-left">
 
-    <div class="hero-badge">⚡ PLATEFORME DE CODE #1 AU QUÉBEC 🍁</div>
+      <div class="badge">⚡ PLATEFORME #1 AU QUÉBEC</div>
 
-    <h1 class="hero-titre">
-      <span class="titre-small">TON</span>
-      <span class="titre-big">CODEX</span>
-      <span class="titre-sub">PERSONNEL</span>
-    </h1>
+      <h1 class="hero-titre">
+        <span class="t1">TON</span>
+        <span class="t2">CODEX</span>
+        <span class="t3">PERSONNEL</span>
+      </h1>
 
-    <p class="hero-desc">
-      Organise, retrouve pis partage ton code comme un pro.<br>
-      <span class="oj">Fait par des codeurs. Pour des codeurs. 🍁</span>
-    </p>
+      <p class="hero-sub">
+        Organise, retrouve pis partage ton code.<br>
+        <span class="orange">Fait par des codeurs. Pour des codeurs. 🍁</span>
+      </p>
 
-    <div class="stats">
-      <div class="stat">
-        <span class="stat-n">500+</span>
-        <span class="stat-l">SNIPPETS</span>
+      <div class="stats">
+        <div class="stat"><span class="sn">500+</span><span class="sl">SNIPPETS</span></div>
+        <div class="sdiv">|</div>
+        <div class="stat"><span class="sn">100%</span><span class="sl">GRATUIT</span></div>
+        <div class="sdiv">|</div>
+        <div class="stat"><span class="sn">∞</span><span class="sl">POSSIBILITÉS</span></div>
       </div>
-      <div class="stat-sep">|</div>
-      <div class="stat">
-        <span class="stat-n">100%</span>
-        <span class="stat-l">GRATUIT</span>
+
+      <!-- BOUTONS 3D -->
+      <div class="boutons">
+
+        <button class="btn3d connexion" id="btnOuvrirConnexion">
+          <span class="top">🔐 SE CONNECTER</span>
+          <span class="bot"></span>
+        </button>
+
+        <button class="btn3d inscription" id="btnOuvrirInscription">
+          <span class="top">🚀 S'INSCRIRE</span>
+          <span class="bot"></span>
+        </button>
+
       </div>
-      <div class="stat-sep">|</div>
-      <div class="stat">
-        <span class="stat-n">∞</span>
-        <span class="stat-l">POSSIBILITÉS</span>
-      </div>
+
     </div>
 
-    <div class="btns">
-      <button class="btn3d btn-conn" onclick="ouvrirConnexion()">
-        <span class="btn3d-face">🔐 SE CONNECTER</span>
-        <span class="btn3d-shadow"></span>
-      </button>
-      <button class="btn3d btn-reg" onclick="ouvrirInscription()">
-        <span class="btn3d-face">🚀 S'INSCRIRE</span>
-        <span class="btn3d-shadow"></span>
-      </button>
-    </div>
-
-    <p class="switch-link" style="margin-top:22px; text-align:left;">
-      Déjà membre? <a onclick="ouvrirConnexion()">Connecte-toé icitte →</a>
-    </p>
-
-  </div>
-
-  <!-- Carte déco code -->
-  <div class="hero-deco">
-    <div class="code-card">
-      <div class="code-header">
-        <span class="dot r"></span>
-        <span class="dot y"></span>
-        <span class="dot g"></span>
-        <span class="code-fn">ti-codex.js</span>
-      </div>
-      <div class="code-body">
-        <pre><code><span class="co">const</span> <span class="cv">codex</span> = {
-  titre:  <span class="cs">"Mon Snippet 🍁"</span>,
-  lang:   <span class="cs">"JavaScript"</span>,
-  auteur: <span class="cs">"Ti-Coder"</span>,
-
-  <span class="co">charger</span>: <span class="co">async</span> () => {
-    <span class="cc">// Câline que c'est l'boutte!</span>
-    <span class="co">const</span> data = <span class="co">await</span>
-      fetch(<span class="cs">"/api/codex"</span>);
-    <span class="co">return</span> data.<span class="cv">json</span>();
-  },
+    <!-- Carte déco code -->
+    <div class="hero-right">
+      <div class="code-card">
+        <div class="card-header">
+          <span class="dot r"></span>
+          <span class="dot y"></span>
+          <span class="dot g"></span>
+          <span class="card-name">codex.js</span>
+        </div>
+        <pre class="card-code"><span class="co">const</span> <span class="cv">codex</span> = {
+  titre: <span class="cs">"Mon Snippet"</span>,
+  lang:  <span class="cs">"JavaScript"</span>,
+  auteur:<span class="cs">"Ti-Coder 🍁"</span>,
 
   <span class="co">run</span>: () => {
+    <span class="cg">// C'est l'boutte!</span>
     console.<span class="cv">log</span>(
-      <span class="cs">"Allô le monde! 🚀"</span>
+      <span class="cs">"Allô le monde!"</span>
     );
   }
 };
 
-codex.<span class="cv">run</span>(); <span class="cur">█</span></code></pre>
+codex.<span class="cv">run</span>();
+<span class="cur">█</span></pre>
       </div>
     </div>
+  </section>
+
+  <!-- ====== FEATURES ====== -->
+  <section class="features" id="features">
+    <h2>POURQUOI <span>CODEX</span>?</h2>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <span>⚡</span>
+        <h3>ULTRA RAPIDE</h3>
+        <p>Retrouve ton code en 2 secondes, câline!</p>
+      </div>
+      <div class="feat-card">
+        <span>🔐</span>
+        <h3>SÉCURISÉ</h3>
+        <p>Ton code est privé pis bien protégé.</p>
+      </div>
+      <div class="feat-card">
+        <span>🍁</span>
+        <h3>100% QUÉBÉCOIS</h3>
+        <p>Fait avec amour au Québec!</p>
+      </div>
+      <div class="feat-card">
+        <span>📦</span>
+        <h3>IMPORT ZIP</h3>
+        <p>Importe des projets complets en ZIP!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== MODAL CONNEXION ====== -->
+  <div id="modalConnexion" class="overlay hidden">
+    <div class="modal">
+      <button class="fermer" onclick="fermerModals()">✕</button>
+      <div class="mbadge">🔐 ACCÈS SÉCURISÉ</div>
+      <h2>SE CONNECTER</h2>
+
+      <div class="fg">
+        <label>📧 COURRIEL</label>
+        <input type="email" id="lCourriel" placeholder="toi@codex.ca">
+      </div>
+      <div class="fg">
+        <label>🔑 MOT DE PASSE</label>
+        <input type="password" id="lMdp" placeholder="••••••••">
+      </div>
+
+      <p id="lErr" class="err hidden">❌ Identifiants incorrects!</p>
+
+      <button class="btn3d connexion full" onclick="seConnecter()">
+        <span class="top">⚡ CONNEXION</span>
+        <span class="bot"></span>
+      </button>
+
+      <p class="switch">Pas de compte? 
+        <a href="#" onclick="switchModal('inscription')">S'inscrire →</a>
+      </p>
+    </div>
   </div>
-</section>
 
-<!-- ========== FEATURES ========== -->
-<section class="features">
-  <h2 class="sect-titre">POURQUOI <span>TI-CODEX</span>?</h2>
-  <div class="feat-grid">
-    <div class="feat-card">
-      <span class="feat-ico">⚡</span>
-      <h3>ULTRA RAPIDE</h3>
-      <p>Retrouve ton code en 2 secondes, câline!</p>
-    </div>
-    <div class="feat-card">
-      <span class="feat-ico">📦</span>
-      <h3>IMPORT ZIP</h3>
-      <p>Glisse tes fichiers ZIP — on gère toute pour toé!</p>
-    </div>
-    <div class="feat-card">
-      <span class="feat-ico">💬</span>
-      <h3>CHAT IA</h3>
-      <p>Un assistant IA intégré pour t'aider à coder!</p>
-    </div>
-    <div class="feat-card">
-      <span class="feat-ico">🍁</span>
-      <h3>100% QUÉBÉCOIS</h3>
-      <p>Fait avec amour au Québec, pour les codeurs d'icitte!</p>
+  <!-- ====== MODAL INSCRIPTION ====== -->
+  <div id="modalInscription" class="overlay hidden">
+    <div class="modal">
+      <button class="fermer" onclick="fermerModals()">✕</button>
+      <div class="mbadge green">🚀 NOUVEAU COMPTE</div>
+      <h2 class="h2green">S'INSCRIRE</h2>
+
+      <div class="fg">
+        <label>👤 PSEUDO</label>
+        <input type="text" id="rPseudo" placeholder="ti-coder-2024">
+      </div>
+      <div class="fg">
+        <label>📧 COURRIEL</label>
+        <input type="email" id="rCourriel" placeholder="toi@codex.ca">
+      </div>
+      <div class="fg">
+        <label>🔑 MOT DE PASSE</label>
+        <input type="password" id="rMdp" placeholder="Min. 6 caractères">
+      </div>
+      <div class="fg">
+        <label>🔁 CONFIRMER</label>
+        <input type="password" id="rConfirm" placeholder="••••••••">
+      </div>
+
+      <p id="rErr" class="err hidden">❌ Erreur!</p>
+      <p id="rOk"  class="ok  hidden">✅ Compte créé! Bienvenue!</p>
+
+      <button class="btn3d inscription full" onclick="sInscrire()">
+        <span class="top">🍁 CRÉER MON COMPTE</span>
+        <span class="bot"></span>
+      </button>
+
+      <p class="switch">Déjà un compte?
+        <a href="#" onclick="switchModal('connexion')">Se connecter →</a>
+      </p>
     </div>
   </div>
-</section>
 
-<!-- ========== MODAL CONNEXION ========== -->
-<div id="modalConn" class="overlay hidden">
-  <div class="modal">
-    <button class="btn-fermer" onclick="fermerTout()">✕</button>
-    <div class="modal-badge">🔐 ACCÈS SÉCURISÉ</div>
-    <h2>SE CONNECTER</h2>
+  <!-- ====== TOAST ====== -->
+  <div id="toast" class="toast hidden"></div>
 
-    <div class="fg">
-      <label>📧 Courriel</label>
-      <input type="email" id="connEmail" placeholder="toi@codex.ca">
-    </div>
-    <div class="fg">
-      <label>🔑 Mot de passe</label>
-      <input type="password" id="connMdp" placeholder="••••••••">
-    </div>
-
-    <p id="connErr" class="erreur hidden">❌ Courriel ou mot de passe incorrect!</p>
-
-    <button class="btn-modal lime" onclick="seConnecter()">⚡ CONNEXION</button>
-
-    <p class="switch-link">
-      Pas encore de compte?
-      <a onclick="switchInscription()">S'inscrire →</a>
-    </p>
-  </div>
-</div>
-
-<!-- ========== MODAL INSCRIPTION ========== -->
-<div id="modalReg" class="overlay hidden">
-  <div class="modal">
-    <button class="btn-fermer" onclick="fermerTout()">✕</button>
-    <div class="modal-badge lime">🚀 NOUVEAU COMPTE</div>
-    <h2 class="orange">S'INSCRIRE</h2>
-
-    <div class="fg">
-      <label>👤 Pseudo</label>
-      <input type="text" id="regPseudo" placeholder="ti-coder-2024">
-    </div>
-    <div class="fg">
-      <label>📧 Courriel</label>
-      <input type="email" id="regEmail" placeholder="toi@codex.ca">
-    </div>
-    <div class="fg">
-      <label>🔑 Mot de passe</label>
-      <input type="password" id="regMdp" placeholder="Min. 6 caractères">
-    </div>
-    <div class="fg">
-      <label>🔁 Confirmer</label>
-      <input type="password" id="regConf" placeholder="••••••••">
-    </div>
-
-    <p id="regErr" class="erreur hidden"></p>
-
-    <button class="btn-modal orange" onclick="sInscrire()">🍁 CRÉER MON COMPTE</button>
-
-    <p class="switch-link">
-      Déjà un compte?
-      <a onclick="switchConnexion()">Se connecter →</a>
-    </p>
+  <script src="js/accueil.js"></script>
+</body>
+</html>
