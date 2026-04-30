@@ -1,10 +1,10 @@
-# Câline mon chum! 🤙 On repart from scratch — FULL MALADE! 🔥🍁
+# Aweille mon chum! 🤙 ON REPART DE ZÉRO — FULL FRESH! 🍁
 
-On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue principale, **effet Matrix** derrière pis des boutons 3D! Attache ta tuque! 
+Câline, pas de problème! On refait **TOUTE** en un seul shot! JavaScript comme langue principale, effet Matrix, boutons qui marchent! Attache ta tuque! 🔥
 
 ---
 
-## 📄 `index.html` — TOUT EN UN FICHIER!
+## 📄 `index.html` — FICHIER COMPLET
 
 ```html
 <!DOCTYPE html>
@@ -13,13 +13,14 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🍁 TI-CODEX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
   <style>
+
     /* ================================
        RESET + BASE
     ================================ */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
       font-family: 'Share Tech Mono', monospace;
@@ -30,78 +31,68 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
     }
 
     /* ================================
-       🟢 CANVAS MATRIX
+       MATRIX CANVAS — DERRIÈRE TOUT
     ================================ */
     #matrixCanvas {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
       z-index: 0;
-      opacity: 0.18;
+      opacity: 0.13;
     }
 
     /* ================================
-       TOUT AU DESSUS DU MATRIX
+       TOUT LE CONTENU PAR-DESSUS
     ================================ */
-    .page {
+    .page-wrapper {
       position: relative;
-      z-index: 2;
+      z-index: 1;
     }
 
     /* ================================
-       🔝 NAVBAR
+       NAVBAR
     ================================ */
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 60px;
+      padding: 18px 50px;
       background: rgba(8,8,8,0.92);
-      border-bottom: 1px solid rgba(166,227,0,0.2);
+      border-bottom: 1px solid rgba(166,227,0,0.25);
+      backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
-      z-index: 100;
-      backdrop-filter: blur(12px);
+      z-index: 50;
     }
 
     .logo {
       font-family: 'Orbitron', monospace;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 900;
       letter-spacing: 3px;
+      cursor: pointer;
     }
 
-    .logo-ti    {
-      color: #a6e300;
-      text-shadow: 0 0 15px rgba(166,227,0,0.8);
-    }
-    .logo-codex {
-      color: #ff8c00;
-      text-shadow: 0 0 15px rgba(255,140,0,0.8);
-    }
+    .logo-ti    { color: #a6e300; text-shadow: 0 0 15px rgba(166,227,0,0.7); }
+    .logo-codex { color: #ff8c00; text-shadow: 0 0 15px rgba(255,140,0,0.7); }
 
-    .nav-links {
-      display: flex;
-      gap: 35px;
-      align-items: center;
-    }
+    .nav-links { display: flex; gap: 30px; align-items: center; }
 
     .nav-link {
       color: rgba(166,227,0,0.55);
       text-decoration: none;
       font-size: 12px;
       letter-spacing: 2px;
-      transition: all 0.3s;
-      text-transform: uppercase;
+      transition: color 0.3s;
     }
 
     .nav-link:hover { color: #ff8c00; }
 
     /* ================================
-       🦸 HERO SECTION
+       HERO SECTION
     ================================ */
     .hero {
-      min-height: 90vh;
+      min-height: 91vh;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -110,32 +101,29 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       overflow: hidden;
     }
 
-    /* Particules */
-    .particules span {
+    /* Grille animée */
+    .hero::before {
+      content: '';
       position: absolute;
-      display: block;
-      width: 3px; height: 3px;
-      border-radius: 50%;
-      animation: floatUp 9s infinite;
-      opacity: 0;
-    }
-    .particules span:nth-child(1){left:8%;  animation-delay:0s; background:#a6e300;}
-    .particules span:nth-child(2){left:22%; animation-delay:2s; background:#ff8c00;}
-    .particules span:nth-child(3){left:40%; animation-delay:4s; background:#a6e300;}
-    .particules span:nth-child(4){left:58%; animation-delay:1s; background:#ff8c00;}
-    .particules span:nth-child(5){left:75%; animation-delay:3s; background:#a6e300;}
-    .particules span:nth-child(6){left:91%; animation-delay:5s; background:#ff8c00;}
-
-    @keyframes floatUp {
-      0%   { bottom:-10px; opacity:0; }
-      20%  { opacity:0.9; }
-      100% { bottom:100vh; opacity:0; }
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(166,227,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(166,227,0,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridDrift 25s linear infinite;
+      pointer-events: none;
     }
 
-    /* ===== CONTENU HERO ===== */
-    .hero-content {
+    @keyframes gridDrift {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(50px); }
+    }
+
+    /* ===== HERO GAUCHE ===== */
+    .hero-left {
       flex: 1;
-      max-width: 570px;
+      max-width: 560px;
+      position: relative;
       z-index: 2;
     }
 
@@ -144,218 +132,241 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       background: rgba(255,140,0,0.1);
       border: 1px solid rgba(255,140,0,0.4);
       color: #ff8c00;
-      padding: 6px 18px;
+      padding: 5px 16px;
       font-size: 10px;
       letter-spacing: 3px;
       margin-bottom: 28px;
-      animation: pulseGlow 3s infinite;
+      animation: badgePulse 3s infinite;
     }
 
-    @keyframes pulseGlow {
-      0%,100%{ box-shadow: 0 0 0 0 rgba(255,140,0,0.3); }
-      50%    { box-shadow: 0 0 15px 5px rgba(255,140,0,0.15); }
+    @keyframes badgePulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,140,0,0.2); }
+      50%      { box-shadow: 0 0 15px 5px rgba(255,140,0,0.1); }
     }
 
     .hero-titre {
       font-family: 'Orbitron', monospace;
       font-weight: 900;
-      line-height: 1;
+      line-height: 1.0;
       margin-bottom: 22px;
     }
 
-    .titre-ligne1 {
+    .titre-sub {
       display: block;
-      font-size: 1.3rem;
-      color: rgba(166,227,0,0.55);
-      letter-spacing: 10px;
+      font-size: 1.2rem;
+      color: rgba(166,227,0,0.5);
+      letter-spacing: 8px;
+      margin-bottom: 5px;
     }
 
-    .titre-ligne2 {
+    .titre-main {
       display: block;
-      font-size: 5.8rem;
+      font-size: 5rem;
       color: #a6e300;
       letter-spacing: 4px;
       text-shadow:
-        0 0 20px rgba(166,227,0,0.7),
-        0 0 50px rgba(166,227,0,0.25);
-      animation: glitch 6s infinite;
+        0 0 20px rgba(166,227,0,0.6),
+        0 0 60px rgba(166,227,0,0.2);
+      animation: titreGlitch 6s infinite;
     }
 
-    @keyframes glitch {
-      0%,89%,100% {
-        text-shadow: 0 0 20px rgba(166,227,0,0.7);
+    @keyframes titreGlitch {
+      0%,88%,100% {
+        text-shadow: 0 0 20px rgba(166,227,0,0.6), 0 0 60px rgba(166,227,0,0.2);
         transform: none;
       }
-      90% { text-shadow: -3px 0 #ff8c00, 3px 0 #a6e300; transform:translateX(2px);}
-      91% { text-shadow: 3px 0 #ff8c00, -3px 0 #a6e300; transform:translateX(-2px);}
-      92% { text-shadow: 0 0 20px rgba(166,227,0,0.7); transform:none;}
+      89% { transform: translateX(-3px); color: #ff8c00; }
+      90% { transform: translateX(3px);  color: #a6e300; }
+      91% { transform: translateX(0);    color: #a6e300; }
     }
 
-    .titre-ligne3 {
+    .titre-accent {
       display: block;
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       color: #ff8c00;
-      letter-spacing: 14px;
+      letter-spacing: 10px;
       text-shadow: 0 0 15px rgba(255,140,0,0.6);
     }
 
-    .hero-sous-titre {
-      color: rgba(166,227,0,0.55);
+    .hero-desc {
       font-size: 14px;
+      color: rgba(166,227,0,0.55);
       line-height: 1.9;
       margin-bottom: 28px;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
-    .accent-orange { color: #ff8c00; }
+    .hero-desc span { color: #ff8c00; }
 
     /* Stats */
     .hero-stats {
       display: flex;
+      gap: 25px;
       align-items: center;
-      gap: 18px;
-      margin-bottom: 38px;
+      margin-bottom: 40px;
     }
 
-    .stat-num {
+    .stat { text-align: center; }
+
+    .stat-n {
       display: block;
       font-family: 'Orbitron', monospace;
       font-size: 1.5rem;
       font-weight: 900;
       color: #a6e300;
-      text-shadow: 0 0 10px rgba(166,227,0,0.6);
+      text-shadow: 0 0 10px rgba(166,227,0,0.5);
     }
 
-    .stat-label {
+    .stat-l {
       display: block;
       font-size: 9px;
-      color: rgba(255,140,0,0.7);
+      color: rgba(255,140,0,0.65);
       letter-spacing: 2px;
     }
 
-    .stat-divider {
-      color: rgba(166,227,0,0.2);
-      font-size: 1.5rem;
-    }
+    .stat-div { color: rgba(166,227,0,0.15); font-size: 2rem; }
 
     /* ================================
-       🔴 BOUTONS 3D — LE BOUTTE!
+       BOUTONS 3D — LE CŒUR!
     ================================ */
-    .hero-boutons {
+    .boutons-hero {
       display: flex;
-      gap: 22px;
+      gap: 18px;
       flex-wrap: wrap;
     }
 
-    .btn-3d {
+    /* Base commune */
+    .btn3d {
       position: relative;
-      border: none;
       cursor: pointer;
+      border: none;
       outline: none;
       font-family: 'Orbitron', monospace;
       font-weight: 700;
       letter-spacing: 2px;
       text-transform: uppercase;
-      border-radius: 6px;
+      background: transparent;
+      transform-style: preserve-3d;
       transition: transform 0.1s;
+      border-radius: 6px;
     }
 
-    .btn-top {
+    .btn3d-face {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 17px 34px;
+      padding: 15px 30px;
       border-radius: 6px;
+      font-size: 14px;
       position: relative;
       z-index: 2;
-      font-size: 14px;
+      transition: transform 0.1s;
+      user-select: none;
+    }
+
+    .btn3d-ombre {
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      transform: translateY(6px);
+      z-index: 1;
       transition: transform 0.1s;
     }
 
-    .btn-shadow {
-      position: absolute;
-      bottom: -6px; left: 0;
-      width: 100%; height: 100%;
-      border-radius: 6px;
-      z-index: 1;
-      transition: all 0.1s;
+    /* Clic 3D */
+    .btn3d:active .btn3d-face {
+      transform: translateY(5px);
+    }
+    .btn3d:active .btn3d-ombre {
+      transform: translateY(1px);
     }
 
-    /* Effet clic */
-    .btn-3d:active .btn-top    { transform: translateY(5px); }
-    .btn-3d:active .btn-shadow { bottom: -1px; }
-
-    /* Connexion — VERT LIME */
-    .btn-connexion .btn-top {
+    /* ===== CONNEXION — VERT LIME ===== */
+    .btn-cnx .btn3d-face {
       background: #a6e300;
       color: #080808;
       box-shadow:
-        0 0 25px rgba(166,227,0,0.45),
+        0 0 25px rgba(166,227,0,0.5),
         inset 0 1px 0 rgba(255,255,255,0.25);
     }
-    .btn-connexion .btn-shadow { background: #4a6e00; }
-    .btn-connexion:hover .btn-top {
-      background: #c0f500;
-      box-shadow: 0 0 35px rgba(166,227,0,0.8), 0 0 70px rgba(166,227,0,0.3);
+
+    .btn-cnx .btn3d-ombre {
+      background: #567500;
     }
 
-    /* Inscription — ORANGE */
-    .btn-inscription .btn-top {
+    .btn-cnx:hover .btn3d-face {
+      background: #c2f700;
+      box-shadow:
+        0 0 40px rgba(166,227,0,0.8),
+        0 0 80px rgba(166,227,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    /* ===== INSCRIPTION — ORANGE ===== */
+    .btn-ins .btn3d-face {
       background: transparent;
       color: #ff8c00;
       border: 2px solid #ff8c00;
-      box-shadow: 0 0 20px rgba(255,140,0,0.3);
+      box-shadow:
+        0 0 20px rgba(255,140,0,0.3),
+        inset 0 0 15px rgba(255,140,0,0.05);
     }
-    .btn-inscription .btn-shadow { background: #6b3800; }
-    .btn-inscription:hover .btn-top {
+
+    .btn-ins .btn3d-ombre {
+      background: #6b3900;
+    }
+
+    .btn-ins:hover .btn3d-face {
       background: rgba(255,140,0,0.12);
       color: #ffaa44;
       border-color: #ffaa44;
-      box-shadow: 0 0 35px rgba(255,140,0,0.7), 0 0 70px rgba(255,140,0,0.25);
+      box-shadow:
+        0 0 35px rgba(255,140,0,0.6),
+        0 0 70px rgba(255,140,0,0.2),
+        inset 0 0 20px rgba(255,140,0,0.08);
     }
 
-    .hero-lien-bas {
+    .btn-icon-emoji { font-size: 16px; }
+
+    .hero-note {
       margin-top: 22px;
-      color: rgba(166,227,0,0.4);
+      color: rgba(166,227,0,0.3);
       font-size: 12px;
       letter-spacing: 1px;
     }
 
-    .hero-lien-bas a {
+    .hero-note a {
       color: #ff8c00;
       text-decoration: none;
-      transition: all 0.2s;
     }
 
-    .hero-lien-bas a:hover {
-      text-shadow: 0 0 10px rgba(255,140,0,0.9);
-    }
+    .hero-note a:hover { text-shadow: 0 0 10px rgba(255,140,0,0.8); }
 
-    /* ================================
-       💻 CARTE DÉCO DROITE
-    ================================ */
-    .hero-deco {
-      flex: 0 0 410px;
+    /* ===== HERO DROITE — CARTE CODE ===== */
+    .hero-right {
+      flex: 0 0 400px;
+      position: relative;
       z-index: 2;
       animation: floatCard 4s ease-in-out infinite;
     }
 
     @keyframes floatCard {
-      0%,100% { transform: translateY(0) rotateY(-4deg); }
+      0%,100% { transform: translateY(0) rotateY(-5deg); }
       50%      { transform: translateY(-18px) rotateY(4deg); }
     }
 
-    .deco-card {
-      background: rgba(4,4,4,0.96);
-      border: 1px solid rgba(166,227,0,0.22);
+    .code-card {
+      background: rgba(5,5,5,0.97);
+      border: 1px solid rgba(166,227,0,0.2);
       border-radius: 10px;
       overflow: hidden;
       box-shadow:
-        0 0 40px rgba(166,227,0,0.08),
-        0 30px 60px rgba(0,0,0,0.85);
+        0 0 50px rgba(166,227,0,0.08),
+        0 0 100px rgba(255,140,0,0.04),
+        0 30px 60px rgba(0,0,0,0.9);
     }
 
-    .deco-header {
+    .card-header {
       display: flex;
       align-items: center;
       gap: 7px;
@@ -364,36 +375,41 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       border-bottom: 1px solid rgba(166,227,0,0.12);
     }
 
-    .dot { width:11px; height:11px; border-radius:50%; display:inline-block; }
-    .dot.r { background: #ff5f57; }
-    .dot.y { background: #febc2e; }
-    .dot.g { background: #28c840; }
+    .dot { width:11px; height:11px; border-radius:50%; }
+    .dot-r { background:#ff5f57; }
+    .dot-y { background:#febc2e; }
+    .dot-g { background:#28c840; }
 
-    .deco-filename {
+    .card-filename {
       margin-left: 8px;
       color: rgba(166,227,0,0.35);
       font-size: 12px;
+      letter-spacing: 1px;
     }
 
-    .deco-body {
-      padding: 22px 25px;
+    .card-body {
+      padding: 22px;
       font-size: 13px;
       line-height: 1.85;
     }
 
-    .co { color: #ff8c00; }       /* orange — mots-clés */
-    .cv { color: #a6e300; }       /* vert lime — fonctions */
-    .cs { color: #c8f07a; }       /* lime clair — strings */
-    .cc { color: rgba(166,227,0,0.3); } /* commentaires */
+    .card-body code { font-family: 'Share Tech Mono', monospace; }
 
-    .cursor {
+    .co { color: #ff8c00; }           /* keyword orange */
+    .cv { color: #a6e300; }           /* variable lime */
+    .cs { color: #c8f07a; }           /* string */
+    .cc { color: rgba(166,227,0,0.3); } /* commentaire */
+    .cn { color: #ffdd77; }           /* nombre */
+
+    .cursor-blink {
       color: #a6e300;
       animation: blink 1s step-end infinite;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
 
     /* ================================
-       🃏 FEATURES
+       FEATURES
     ================================ */
     .features {
       padding: 80px;
@@ -410,9 +426,9 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       margin-bottom: 50px;
     }
 
-    .section-titre span { color: #ff8c00; text-shadow: 0 0 15px rgba(255,140,0,0.5); }
+    .section-titre span { color: #ff8c00; }
 
-    .features-grid {
+    .feat-grid {
       display: grid;
       grid-template-columns: repeat(4,1fr);
       gap: 22px;
@@ -420,26 +436,26 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       margin: 0 auto;
     }
 
-    .feature-card {
+    .feat-card {
       background: rgba(8,8,8,0.85);
       border: 1px solid rgba(166,227,0,0.12);
       border-bottom: 3px solid #a6e300;
       border-radius: 6px;
-      padding: 30px 22px;
+      padding: 28px 22px;
       text-align: center;
       transition: all 0.3s;
       cursor: default;
     }
 
-    .feature-card:hover {
+    .feat-card:hover {
       border-bottom-color: #ff8c00;
       transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 25px rgba(166,227,0,0.06);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(166,227,0,0.06);
     }
 
-    .feature-icon { font-size: 2.4rem; margin-bottom: 14px; display: block; }
+    .feat-ico { font-size: 2.2rem; margin-bottom: 14px; display: block; }
 
-    .feature-card h3 {
+    .feat-card h3 {
       font-family: 'Orbitron', monospace;
       color: #ff8c00;
       font-size: 0.8rem;
@@ -447,19 +463,19 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       margin-bottom: 10px;
     }
 
-    .feature-card p {
+    .feat-card p {
       color: rgba(166,227,0,0.5);
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1.7;
     }
 
     /* ================================
-       🪟 MODALS
+       MODALS
     ================================ */
-    .modal-overlay {
+    .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.9);
+      background: rgba(0,0,0,0.88);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -467,78 +483,81 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       backdrop-filter: blur(8px);
     }
 
-    .modal-box {
-      background: #060606;
+    .modal {
+      background: #080808;
       border: 1px solid rgba(166,227,0,0.25);
       border-top: 3px solid #ff8c00;
       border-radius: 8px;
-      padding: 45px 40px;
+      padding: 42px 38px;
       width: 100%;
-      max-width: 440px;
+      max-width: 430px;
       position: relative;
       animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
       box-shadow:
-        0 0 60px rgba(166,227,0,0.08),
+        0 0 60px rgba(166,227,0,0.1),
         0 0 120px rgba(255,140,0,0.05);
     }
 
     @keyframes popIn {
-      from { transform: translateY(-50px) scale(0.93); opacity:0; }
-      to   { transform: translateY(0) scale(1); opacity:1; }
+      from { transform: translateY(-40px) scale(0.94); opacity: 0; }
+      to   { transform: translateY(0) scale(1); opacity: 1; }
     }
 
-    .modal-badge {
+    .modal-tag {
       display: inline-block;
-      padding: 4px 14px;
-      border-radius: 2px;
+      padding: 3px 12px;
       font-size: 10px;
       letter-spacing: 3px;
       margin-bottom: 14px;
+      border-radius: 2px;
     }
 
-    .badge-connexion {
+    .tag-cnx {
       background: rgba(255,140,0,0.1);
       border: 1px solid rgba(255,140,0,0.3);
       color: #ff8c00;
     }
 
-    .badge-inscription {
+    .tag-ins {
       background: rgba(166,227,0,0.1);
       border: 1px solid rgba(166,227,0,0.3);
       color: #a6e300;
     }
 
-    .modal-box h2 {
+    .modal h2 {
       font-family: 'Orbitron', monospace;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       letter-spacing: 3px;
       margin-bottom: 28px;
-      color: #a6e300;
+      color: #ff8c00;
+      text-shadow: 0 0 15px rgba(255,140,0,0.5);
     }
 
-    .modal-box h2.orange { color: #ff8c00; text-shadow: 0 0 15px rgba(255,140,0,0.5); }
+    .modal h2.h-ins { color: #a6e300; text-shadow: 0 0 15px rgba(166,227,0,0.5); }
 
-    .btn-fermer {
+    .btn-close {
       position: absolute;
-      top: 15px; right: 18px;
+      top: 14px; right: 16px;
       background: transparent;
       border: none;
-      color: #ff8c00;
-      font-size: 22px;
+      color: rgba(255,140,0,0.6);
+      font-size: 20px;
       cursor: pointer;
       font-family: 'Share Tech Mono', monospace;
       transition: all 0.2s;
+      line-height: 1;
     }
 
-    .btn-fermer:hover {
+    .btn-close:hover {
       color: #a6e300;
       transform: rotate(90deg);
-      text-shadow: 0 0 10px rgba(166,227,0,0.8);
+      text-shadow: 0 0 10px rgba(166,227,0,0.7);
     }
 
-    .form-group { margin-bottom: 18px; }
+    /* Form */
+    .fg { margin-bottom: 18px; }
 
-    .form-group label {
+    .fg label {
       display: block;
       color: #ff8c00;
       font-size: 11px;
@@ -547,10 +566,10 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       margin-bottom: 7px;
     }
 
-    .form-group input {
+    .fg input {
       width: 100%;
-      padding: 13px 15px;
-      background: #0a0a0a;
+      padding: 12px 14px;
+      background: #050505;
       border: 1px solid rgba(166,227,0,0.3);
       border-radius: 4px;
       color: #a6e300;
@@ -559,147 +578,117 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       transition: all 0.3s;
     }
 
-    .form-group input::placeholder { color: rgba(166,227,0,0.2); }
+    .fg input::placeholder { color: rgba(166,227,0,0.2); }
 
-    .form-group input:focus {
+    .fg input:focus {
       outline: none;
       border-color: #ff8c00;
-      box-shadow: 0 0 15px rgba(255,140,0,0.25);
+      box-shadow: 0 0 12px rgba(255,140,0,0.25);
       color: #ff8c00;
     }
 
-    /* Bouton modal 3D vert */
-    .btn-modal-login {
+    /* Boutons dans modal */
+    .btn3d-modal {
       width: 100%;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
-    .btn-modal-login .btn-top {
-      background: #a6e300;
-      color: #080808;
+    .btn3d-modal .btn3d-face {
       justify-content: center;
-      box-shadow: 0 0 20px rgba(166,227,0,0.4);
-      width: 100%;
+      font-size: 13px;
+      padding: 14px;
     }
 
-    .btn-modal-login .btn-top:hover {
-      background: #c0f500;
-    }
-
-    .btn-modal-login .btn-shadow { background: #4a6e00; }
-
-    /* Bouton modal 3D orange */
-    .btn-modal-reg {
-      width: 100%;
-      margin-top: 8px;
-    }
-
-    .btn-modal-reg .btn-top {
-      background: #ff8c00;
-      color: #080808;
-      justify-content: center;
-      box-shadow: 0 0 20px rgba(255,140,0,0.4);
-      width: 100%;
-      font-weight: 900;
-    }
-
-    .btn-modal-reg .btn-shadow { background: #6b3800; }
-
-    .btn-modal-reg:hover .btn-top {
-      background: #ffaa33;
-      box-shadow: 0 0 30px rgba(255,140,0,0.7);
-    }
-
-    .msg-erreur {
+    /* Msg erreur / succès */
+    .msg-err {
       color: #ff4444;
       font-size: 12px;
       text-align: center;
       margin-bottom: 10px;
       letter-spacing: 1px;
-      text-shadow: 0 0 8px rgba(255,68,68,0.5);
+      text-shadow: 0 0 8px rgba(255,68,68,0.4);
     }
 
-    .msg-succes {
+    .msg-ok {
       color: #a6e300;
       font-size: 12px;
       text-align: center;
       margin-bottom: 10px;
       letter-spacing: 1px;
-      text-shadow: 0 0 8px rgba(166,227,0,0.5);
+      text-shadow: 0 0 8px rgba(166,227,0,0.4);
     }
 
-    .lien-switch {
+    .switch-link {
       text-align: center;
       color: rgba(166,227,0,0.4);
       font-size: 12px;
-      margin-top: 16px;
+      margin-top: 18px;
       letter-spacing: 1px;
     }
 
-    .lien-switch a {
+    .switch-link a {
       color: #ff8c00;
       text-decoration: none;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
-    .lien-switch a:hover { text-shadow: 0 0 10px rgba(255,140,0,0.9); }
+    .switch-link a:hover { text-shadow: 0 0 10px rgba(255,140,0,0.7); }
 
     /* ================================
-       🔔 TOAST
+       TOAST
     ================================ */
     .toast {
       position: fixed;
-      bottom: 30px; right: 30px;
-      background: #060606;
+      bottom: 28px; right: 28px;
+      background: #080808;
       border: 1px solid #a6e300;
       border-left: 4px solid #ff8c00;
       color: #a6e300;
-      padding: 15px 22px;
+      padding: 14px 22px;
       border-radius: 4px;
       font-size: 13px;
       letter-spacing: 1px;
-      box-shadow: 0 0 25px rgba(166,227,0,0.2);
-      animation: slideToast 0.3s ease;
+      box-shadow: 0 0 25px rgba(166,227,0,0.15);
+      animation: toastIn 0.3s ease;
       z-index: 9999;
     }
 
-    @keyframes slideToast {
-      from { opacity:0; transform:translateY(15px); }
-      to   { opacity:1; transform:translateY(0); }
+    @keyframes toastIn {
+      from { opacity:0; transform: translateY(15px); }
+      to   { opacity:1; transform: translateY(0); }
     }
 
     /* ================================
-       UTILITAIRES
+       UTILITAIRE
     ================================ */
     .hidden { display: none !important; }
 
     /* ================================
-       📱 RESPONSIVE
+       RESPONSIVE
     ================================ */
     @media (max-width: 900px) {
-      .hero { flex-direction: column; padding: 40px 30px; gap: 40px; }
-      .hero-deco { flex: none; width: 100%; }
-      .features-grid { grid-template-columns: repeat(2,1fr); }
+      .hero { flex-direction: column; padding: 40px 25px; gap: 40px; }
+      .hero-right { flex: none; width: 100%; max-width: 100%; }
+      .features { padding: 50px 25px; }
+      .feat-grid { grid-template-columns: repeat(2,1fr); }
       .navbar { padding: 15px 20px; }
-      .titre-ligne2 { font-size: 3.5rem; }
+      .titre-main { font-size: 3.5rem; }
     }
 
     @media (max-width: 500px) {
-      .features-grid { grid-template-columns: 1fr; }
-      .hero-boutons { flex-direction: column; }
-      .btn-top { justify-content: center; }
-      .features { padding: 40px 20px; }
+      .feat-grid { grid-template-columns: 1fr; }
+      .boutons-hero { flex-direction: column; }
+      .btn3d-face { padding: 14px 22px; font-size: 12px; }
     }
+
   </style>
 </head>
-
 <body>
 
-<!-- 🟢 CANVAS MATRIX -->
+<!-- 🔴 MATRIX CANVAS -->
 <canvas id="matrixCanvas"></canvas>
 
-<div class="page">
+<div class="page-wrapper">
 
   <!-- ========== NAVBAR ========== -->
   <nav class="navbar">
@@ -710,98 +699,103 @@ On met **tout dans UN seul fichier HTML** avec **JavaScript** comme langue princ
       <a href="#" class="nav-link">ACCUEIL</a>
       <a href="#" class="nav-link">CODEX</a>
       <a href="#" class="nav-link">DOCS</a>
-      <a href="#" class="nav-link" onclick="ouvrirConnexion(); return false;">CONNEXION</a>
+      <a href="#" class="nav-link" onclick="ouvrirCnx(); return false;">CONNEXION</a>
     </div>
   </nav>
 
   <!-- ========== HERO ========== -->
   <section class="hero">
 
-    <div class="particules">
-      <span></span><span></span><span></span>
-      <span></span><span></span><span></span>
-    </div>
+    <div class="hero-left">
 
-    <div class="hero-content">
-
-      <div class="hero-badge">⚡ PLATEFORME #1 DES CODEURS QUÉBÉCOIS</div>
+      <div class="hero-badge">⚡ PLATEFORME #1 AU QUÉBEC 🍁</div>
 
       <h1 class="hero-titre">
-        <span class="titre-ligne1">TON</span>
-        <span class="titre-ligne2">CODEX</span>
-        <span class="titre-ligne3">PERSONNEL</span>
+        <span class="titre-sub">TON</span>
+        <span class="titre-main">CODEX</span>
+        <span class="titre-accent">PERSONNEL</span>
       </h1>
 
-      <p class="hero-sous-titre">
-        Organise, retrouve et partage ton code.<br>
-        <span class="accent-orange">Fait par des codeurs. Pour des codeurs. 🍁</span>
+      <p class="hero-desc">
+        Organise, retrouve pis partage ton code.<br>
+        <span>Fait par des codeurs. Pour des codeurs. 🍁</span>
       </p>
 
       <div class="hero-stats">
-        <div class="stat-item">
-          <span class="stat-num">500+</span>
-          <span class="stat-label">SNIPPETS</span>
+        <div class="stat">
+          <span class="stat-n">500+</span>
+          <span class="stat-l">SNIPPETS</span>
         </div>
-        <div class="stat-divider">|</div>
-        <div class="stat-item">
-          <span class="stat-num">100%</span>
-          <span class="stat-label">GRATUIT</span>
+        <div class="stat-div">|</div>
+        <div class="stat">
+          <span class="stat-n">100%</span>
+          <span class="stat-l">GRATUIT</span>
         </div>
-        <div class="stat-divider">|</div>
-        <div class="stat-item">
-          <span class="stat-num">∞</span>
-          <span class="stat-label">POSSIBILITÉS</span>
+        <div class="stat-div">|</div>
+        <div class="stat">
+          <span class="stat-n">∞</span>
+          <span class="stat-l">POSSIBILITÉS</span>
         </div>
       </div>
 
-      <!-- BOUTONS 3D -->
-      <div class="hero-boutons">
+      <!-- 🔴 BOUTONS 3D -->
+      <div class="boutons-hero">
 
-        <button class="btn-3d btn-connexion" onclick="ouvrirConnexion()">
-          <span class="btn-top">🔐 SE CONNECTER</span>
-          <span class="btn-shadow"></span>
+        <!-- CONNEXION -->
+        <button class="btn3d btn-cnx" onclick="ouvrirCnx()">
+          <span class="btn3d-ombre"></span>
+          <span class="btn3d-face">
+            <span class="btn-icon-emoji">🔐</span>
+            SE CONNECTER
+          </span>
         </button>
 
-        <button class="btn-3d btn-inscription" onclick="ouvrirInscription()">
-          <span class="btn-top">🚀 S'INSCRIRE</span>
-          <span class="btn-shadow"></span>
+        <!-- INSCRIPTION -->
+        <button class="btn3d btn-ins" onclick="ouvrirIns()">
+          <span class="btn3d-ombre"></span>
+          <span class="btn3d-face">
+            <span class="btn-icon-emoji">🚀</span>
+            S'INSCRIRE
+          </span>
         </button>
 
       </div>
 
-      <p class="hero-lien-bas">
-        Déjà membre? <a href="#" onclick="ouvrirConnexion(); return false;">Connecte-toé icitte →</a>
+      <p class="hero-note">
+        Déjà membre? <a href="#" onclick="ouvrirCnx(); return false;">Connecte-toé icitte →</a>
       </p>
 
     </div>
 
-    <!-- Carte déco code -->
-    <div class="hero-deco">
-      <div class="deco-card">
-        <div class="deco-header">
-          <span class="dot r"></span>
-          <span class="dot y"></span>
-          <span class="dot g"></span>
-          <span class="deco-filename">ti-codex.js</span>
+    <!-- Carte code droite -->
+    <div class="hero-right">
+      <div class="code-card">
+        <div class="card-header">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span class="card-filename">ti-codex.js</span>
         </div>
-        <div class="deco-body">
-          <pre><code><span class="cc">// 🍁 Ti-Codex — JavaScript</span>
-
-<span class="co">const</span> <span class="cv">codex</span> = {
-  titre:  <span class="cs">"Mon Snippet"</span>,
-  langue: <span class="cs">"JavaScript"</span>,
-  auteur: <span class="cs">"Ti-Coder"</span>,
-
-  <span class="cv">run</span>: () => {
-    <span class="cc">// C'est l'boutte! 🔥</span>
-    console.<span class="cv">log</span>(
-      <span class="cs">"Allô le monde!"</span>
-    );
-  }
-};
-
-codex.<span class="cv">run</span>();
-<span class="cursor">█</span></code></pre>
+        <div class="card-body">
+          <code>
+<span class="co">const</span> <span class="cv">codex</span> = {<br>
+&nbsp;&nbsp;nom:  <span class="cs">"Ti-Codex"</span>,<br>
+&nbsp;&nbsp;lang: <span class="cs">"JavaScript"</span>,<br>
+&nbsp;&nbsp;lieu: <span class="cs">"Québec 🍁"</span>,<br>
+<br>
+&nbsp;&nbsp;<span class="cv">init</span>: <span class="co">function</span>() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cc">// Aweille mon chum!</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.<span class="cv">log</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"C'est l'boutte!"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="co">return</span> <span class="cs">"Allô!"</span>;<br>
+&nbsp;&nbsp;}<br>
+};<br>
+<br>
+codex.<span class="cv">init</span>();<br>
+<span class="cc">// ✅ C'est l'boutte!</span><br>
+<span class="cursor-blink">█</span>
+          </code>
         </div>
       </div>
     </div>
@@ -810,31 +804,39 @@ codex.<span class="cv">run</span>();
 
   <!-- ========== FEATURES ========== -->
   <section class="features">
-    <h2 class="section-titre">POURQUOI <span>TI-CODEX</span>?</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <span class="feature-icon">⚡</span>
+    <h2 class="section-titre">POURQUOI <span>CODEX</span>?</h2>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <span class="feat-ico">⚡</span>
         <h3>ULTRA RAPIDE</h3>
         <p>Retrouve ton code en 2 secondes, câline!</p>
       </div>
-      <div class="feature-card">
-        <span class="feature-icon">🔐</span>
+      <div class="feat-card">
+        <span class="feat-ico">🔐</span>
         <h3>SÉCURISÉ</h3>
-        <p>Ton code est privé pis ben protégé mon chum.</p>
+        <p>Ton code est privé pis ben protégé, mon chum!</p>
       </div>
-      <div class="feature-card">
-        <span class="feature-icon">🍁</span>
+      <div class="feat-card">
+        <span class="feat-ico">🍁</span>
         <h3>100% QUÉBÉCOIS</h3>
         <p>Fait avec amour au Québec, pour les codeurs d'icitte!</p>
       </div>
-      <div class="feature-card">
-        <span class="feature-icon">🔧</span>
+      <div class="feat-card">
+        <span class="feat-ico">🔧</span>
         <h3>PERSONNALISABLE</h3>
-        <p>Organise toute comme tu veux tsé!</p>
+        <p>Organise toute comme tu veux, aweille!</p>
       </div>
     </div>
   </section>
 
-</div><!-- fin .page -->
+</div><!-- fin page-wrapper -->
 
 <!-- ========== MODAL CONNEXION ========== -->
+<div id="modalCnx" class="overlay hidden">
+  <div class="modal">
+    <button class="btn-close" onclick="fermerTout()">✕</button>
+    <span class="modal-tag tag-cnx">🔐 ACCÈS SÉCURISÉ</span>
+    <h2>SE CONNECTER</h2>
+
+    <div class="fg">
+      <label>
