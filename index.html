@@ -3,328 +3,165 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TI-LEX-AL | Codex</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Caveat+Brush&display=swap" rel="stylesheet" />
+  <title>AL — Codex Terminal</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <canvas id="matrix-canvas"></canvas>
-  <div class="particles" id="particles"></div>
-
-  <!-- PAGE ACCUEIL -->
-  <main class="hero" id="hero">
-    <div class="hero-logo">
-      <div class="logo-ring">
-        <div class="logo-inner"><span class="logo-al">AL</span></div>
+  <!-- ======= ÉCRAN DE CONNEXION ======= -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="logo.png" alt="Logo AL" onerror="this.style.display='none'" />
+        <h1 class="login-title">TI-LEX-AL</h1>
+        <p class="login-sub">Assistant Codex Terminal</p>
       </div>
-    </div>
-    <div class="hero-text">
-      <h1 class="hero-title"><span class="title-ti">TI-LEX</span><span class="title-al">-AL</span></h1>
-      <p class="hero-subtitle">Ton assistant Codex québécois</p>
-      <div class="hero-tagline">
-        <span class="tag-item">Code</span><span class="tag-sep">·</span>
-        <span class="tag-item">Architecture</span><span class="tag-sep">·</span>
-        <span class="tag-item">GitHub Auto</span>
-      </div>
-    </div>
-    <div class="hero-buttons">
-      <div class="btn-wrapper">
-        <button class="btn-3d btn-login" id="btn-login">
-          <span class="btn-top">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-            Connexion
-          </span>
-          <span class="btn-shadow"></span>
-        </button>
-        <div class="btn-glow btn-glow-login"></div>
-      </div>
-      <div class="btn-wrapper">
-        <button class="btn-3d btn-signup" id="btn-signup">
-          <span class="btn-top">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-            Inscription
-          </span>
-          <span class="btn-shadow"></span>
-        </button>
-        <div class="btn-glow btn-glow-signup"></div>
-      </div>
-    </div>
-    <div class="features">
-      <div class="feature-card" style="--delay:0s"><span class="feature-icon">⚡</span><span class="feature-text">IA temps réel</span></div>
-      <div class="feature-card" style="--delay:.15s"><span class="feature-icon">🖊️</span><span class="feature-text">Codex intelligent</span></div>
-      <div class="feature-card" style="--delay:.3s"><span class="feature-icon">🚀</span><span class="feature-text">Push GitHub auto</span></div>
-    </div>
-  </main>
-
-  <!-- MODALS AUTH -->
-  <div class="modal-overlay" id="modal-overlay">
-    <div class="modal" id="modal-login">
-      <button class="modal-close" id="close-login">&times;</button>
-      <div class="modal-header">
-        <div class="modal-icon">🔑</div>
-        <h2 class="modal-title">Connexion</h2>
-        <p class="modal-sub">Content de te r'voir!</p>
-      </div>
-      <form class="modal-form" id="form-login">
-        <div class="field-group">
-          <label class="field-label">Courriel</label>
-          <input class="field-input" id="login-email" type="email" placeholder="toi@example.com" required />
+      <form id="login-form">
+        <div class="input-group">
+          <label for="username">Utilisateur</label>
+          <input type="text" id="username" placeholder="entrez votre nom..." autocomplete="off" />
         </div>
-        <div class="field-group">
-          <label class="field-label">Mot de passe</label>
-          <input class="field-input" id="login-pass" type="password" placeholder="••••••••" required />
+        <div class="input-group">
+          <label for="password">Mot de passe</label>
+          <input type="password" id="password" placeholder="••••••••" />
         </div>
-        <button type="submit" class="modal-btn modal-btn-primary" id="login-submit">Se connecter</button>
-        <p class="modal-switch">Pas de compte? <a href="#" class="modal-link" id="go-signup">S'inscrire</a></p>
-      </form>
-    </div>
-    <div class="modal" id="modal-signup">
-      <button class="modal-close" id="close-signup">&times;</button>
-      <div class="modal-header">
-        <div class="modal-icon">🚀</div>
-        <h2 class="modal-title">Inscription</h2>
-        <p class="modal-sub">Embarque dans l'aventure!</p>
-      </div>
-      <form class="modal-form" id="form-signup">
-        <div class="field-group">
-          <label class="field-label">Nom complet</label>
-          <input class="field-input" type="text" placeholder="Ton nom" required />
-        </div>
-        <div class="field-group">
-          <label class="field-label">Courriel</label>
-          <input class="field-input" type="email" placeholder="toi@example.com" required />
-        </div>
-        <div class="field-group">
-          <label class="field-label">Mot de passe</label>
-          <input class="field-input" type="password" placeholder="Min. 8 caractères" required />
-        </div>
-        <button type="submit" class="modal-btn modal-btn-primary">Créer mon compte</button>
-        <p class="modal-switch">Déjà un compte? <a href="#" class="modal-link" id="go-login">Se connecter</a></p>
+        <button type="submit" class="login-btn">CONNECTER</button>
+        <p id="login-error" class="login-error"></p>
       </form>
     </div>
   </div>
 
-  <!-- PLATEFORME CODEX -->
-  <div class="platform" id="platform">
+  <!-- ======= INTERFACE CODEX ======= -->
+  <div id="codex-app" class="codex-app hidden">
 
-    <!-- SIDEBAR GAUCHE -->
-    <aside class="sidebar" id="sidebar">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-logo">
-          <span class="sl-al">AL</span>
-          <span class="sl-name">TI-LEX-AL</span>
-        </div>
-        <button class="sidebar-toggle-btn" id="sidebar-close">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <span class="sidebar-logo">⬡ AL</span>
+        <span class="sidebar-version">v2.0</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="chat">
+          <span class="nav-icon">💬</span> Chat
         </button>
-      </div>
-
-      <!-- SECTION PROJET -->
-      <div class="sb-section">
-        <div class="sb-section-title">📁 Projets</div>
-        <button class="sb-new-project" id="btn-new-project">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Nouveau projet
+        <button class="nav-item" data-tab="files">
+          <span class="nav-icon">📁</span> Fichiers
         </button>
-        <div class="project-list" id="project-list">
-          <div class="project-item active" data-id="1">
-            <span class="project-dot"></span>
-            <span class="project-name">Mon App React</span>
-            <span class="project-badge">3</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION DISCUSSIONS -->
-      <div class="sb-section">
-        <div class="sb-section-title">💬 Discussions</div>
-        <div class="discussion-list" id="discussion-list">
-          <div class="discussion-item active">
-            <span class="disc-icon">🔥</span>
-            <div class="disc-info">
-              <span class="disc-name">Setup initial</span>
-              <span class="disc-date">Aujourd'hui</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION CLÉ API -->
-      <div class="sb-section">
-        <div class="sb-section-title">🔑 Clés API</div>
-        <div class="api-key-block">
-          <label class="api-label">Clé OpenAI</label>
-          <div class="api-input-row">
-            <input class="api-input" id="openai-key" type="password" placeholder="sk-..." />
-            <button class="api-save-btn" data-key="openai">💾</button>
-          </div>
-          <label class="api-label">Token GitHub</label>
-          <div class="api-input-row">
-            <input class="api-input" id="github-token" type="password" placeholder="ghp_..." />
-            <button class="api-save-btn" data-key="github">💾</button>
-          </div>
-          <label class="api-label">Repo GitHub</label>
-          <div class="api-input-row">
-            <input class="api-input" id="github-repo" type="text" placeholder="user/repo" />
-            <button class="api-save-btn" data-key="repo">💾</button>
-          </div>
-          <div class="api-status" id="api-status"></div>
-        </div>
-      </div>
-
-      <!-- FOOTER SIDEBAR -->
+        <button class="nav-item" data-tab="terminal">
+          <span class="nav-icon">⌨️</span> Terminal
+        </button>
+        <button class="nav-item" data-tab="settings">
+          <span class="nav-icon">⚙️</span> Paramètres
+        </button>
+      </nav>
       <div class="sidebar-footer">
-        <div class="user-info" id="user-info">
-          <div class="user-avatar">AL</div>
-          <div class="user-details">
-            <span class="user-name">Utilisateur</span>
-            <span class="user-status">● En ligne</span>
-          </div>
-        </div>
-        <button class="logout-btn" id="logout-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        </button>
+        <span id="sidebar-user" class="sidebar-user">👤 user</span>
+        <button id="logout-btn" class="logout-btn">Déconnecter</button>
       </div>
     </aside>
 
-    <!-- ZONE CENTRALE — CHAT -->
-    <div class="chat-zone" id="chat-zone">
-      <header class="chat-topbar">
-        <button class="topbar-menu-btn" id="sidebar-open">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <div class="topbar-center">
-          <span class="topbar-logo">AL</span>
-          <span class="topbar-title">Codex Chat</span>
-        </div>
-        <div class="topbar-right">
-          <div class="topbar-status"><span class="status-dot"></span>AL actif</div>
-          <button class="topbar-plan-btn" id="toggle-plan">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            Plan
-          </button>
-        </div>
-      </header>
+    <!-- MAIN CONTENT -->
+    <main class="codex-main">
 
-      <!-- MESSAGES -->
-      <div class="chat-messages" id="chat-messages">
-        <div class="chat-welcome">
-          <div class="welcome-logo">AL</div>
-          <h3 class="welcome-title">Allô! Chu TI-LEX-AL 🔥</h3>
-          <p class="welcome-sub">Décris-moi ton projet pis je vais te sortir un plan complet, coder les fichiers étape par étape, pis les envoyer directement sur GitHub!</p>
-          <div class="welcome-chips">
-            <button class="chip" data-prompt="Crée-moi une app React avec authentification">App React + Auth</button>
-            <button class="chip" data-prompt="Bâtis-moi une API Node.js REST">API Node.js</button>
-            <button class="chip" data-prompt="Fais-moi un dashboard avec graphiques">Dashboard</button>
-            <button class="chip" data-prompt="Setup un projet Next.js complet">Next.js</button>
+      <!-- TAB: CHAT -->
+      <div id="tab-chat" class="tab-content active">
+        <div class="codex-topbar">
+          <span class="topbar-title">⬡ Codex <span class="orange">AL</span></span>
+          <span class="topbar-status"><span class="dot"></span> En ligne</span>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+          <div class="msg msg-al">
+            <span class="msg-author">AL</span>
+            <div class="msg-bubble">
+              Allo ! Prêt à coder ? Dis-moi c'est quoi ton projet pis on embarque. 🚀
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- BARRE D'INPUT -->
-      <div class="chat-input-area">
         <div class="chat-input-bar">
-          <button class="input-attach" title="Joindre fichier">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-          </button>
-          <textarea
-            class="chat-input"
-            id="chat-input"
-            placeholder="Décris ton projet ou pose une question... (Entrée pour envoyer)"
-            rows="1"
-          ></textarea>
-          <button class="chat-send" id="chat-send">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="input-hint">Shift+Entrée pour nouvelle ligne · Entrée pour envoyer</div>
-      </div>
-    </div>
-
-    <!-- PANEL DROIT — CODEX PLAN + FICHIERS -->
-    <aside class="codex-panel" id="codex-panel">
-      <div class="panel-header">
-        <h3 class="panel-title">
-          <span class="panel-title-icon">📋</span>
-          Plan Codex
-        </h3>
-        <button class="panel-close" id="panel-close">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-
-      <!-- TABS -->
-      <div class="panel-tabs">
-        <button class="panel-tab active" data-tab="plan">📋 Plan</button>
-        <button class="panel-tab" data-tab="files">📁 Fichiers</button>
-        <button class="panel-tab" data-tab="github">🐙 GitHub</button>
-      </div>
-
-      <!-- TAB PLAN -->
-      <div class="panel-content active" id="tab-plan">
-        <div class="plan-empty" id="plan-empty">
-          <span style="font-size:2.5rem">📋</span>
-          <p>Le plan apparaît ici quand AL génère les étapes</p>
-        </div>
-        <div class="plan-steps" id="plan-steps"></div>
-        <div class="plan-actions" id="plan-actions" style="display:none">
-          <button class="plan-btn plan-btn-confirm" id="btn-confirm-plan">✅ Confirmer le plan</button>
-          <button class="plan-btn plan-btn-edit" id="btn-edit-plan">✏️ Modifier</button>
-        </div>
-      </div>
-
-      <!-- TAB FICHIERS -->
-      <div class="panel-content" id="tab-files">
-        <div class="files-header">
-          <span class="files-count" id="files-count">0 fichier(s)</span>
-          <button class="files-push-btn" id="btn-push-all" disabled>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            Push GitHub
-          </button>
-        </div>
-        <div class="file-tree" id="file-tree">
-          <div class="files-empty">
-            <span style="font-size:2rem">📁</span>
-            <p>Les fichiers générés apparaissent ici</p>
+          <div class="chat-input-wrap">
+            <textarea id="chat-input" placeholder="Écris ton message... (Entrée pour envoyer, Shift+Entrée pour nouvelle ligne)" rows="1"></textarea>
+            <button id="send-btn" class="send-btn">➤</button>
+          </div>
+          <div class="input-hints">
+            <span class="hint">/code</span>
+            <span class="hint">/debug</span>
+            <span class="hint">/refactor</span>
+            <span class="hint">/expliquer</span>
           </div>
         </div>
       </div>
 
-      <!-- TAB GITHUB -->
-      <div class="panel-content" id="tab-github">
-        <div class="github-config">
-          <h4 class="github-title">🐙 Configuration GitHub</h4>
-          <div class="github-status-block" id="github-status-block">
-            <div class="gh-status-row">
-              <span class="gh-label">Token</span>
-              <span class="gh-val" id="gh-token-status">Non configuré</span>
-            </div>
-            <div class="gh-status-row">
-              <span class="gh-label">Repo</span>
-              <span class="gh-val" id="gh-repo-status">Non configuré</span>
-            </div>
-            <div class="gh-status-row">
-              <span class="gh-label">Branche</span>
-              <input class="gh-branch-input" id="gh-branch" value="main" />
-            </div>
-          </div>
-          <div class="push-log" id="push-log">
-            <div class="push-log-title">📜 Journal des pushs</div>
-            <div class="push-log-entries" id="push-log-entries">
-              <p class="log-empty">Aucun push encore</p>
-            </div>
+      <!-- TAB: FILES -->
+      <div id="tab-files" class="tab-content">
+        <div class="codex-topbar">
+          <span class="topbar-title">📁 Fichiers <span class="orange">Projet</span></span>
+        </div>
+        <div class="files-panel">
+          <div class="file-tree">
+            <div class="file-item folder">📂 src/</div>
+            <div class="file-item" style="padding-left:1.5rem">📄 index.html</div>
+            <div class="file-item" style="padding-left:1.5rem">🎨 style.css</div>
+            <div class="file-item" style="padding-left:1.5rem">⚡ script.js</div>
+            <div class="file-item folder">📂 api/</div>
+            <div class="file-item" style="padding-left:1.5rem">🔌 chat.js</div>
+            <div class="file-item">📦 package.json</div>
+            <div class="file-item">🔧 vercel.json</div>
           </div>
         </div>
       </div>
 
-    </aside>
+      <!-- TAB: TERMINAL -->
+      <div id="tab-terminal" class="tab-content">
+        <div class="codex-topbar">
+          <span class="topbar-title">⌨️ Terminal <span class="orange">AL</span></span>
+          <button id="clear-terminal" class="clear-btn">Effacer</button>
+        </div>
+        <div id="terminal-output" class="terminal-output">
+          <div class="term-line"><span class="term-prompt">AL@codex:~$</span> <span class="term-text">Bienvenue dans le terminal AL</span></div>
+          <div class="term-line"><span class="term-prompt">AL@codex:~$</span> <span class="term-text">Tape une commande ci-dessous...</span></div>
+        </div>
+        <div class="terminal-input-bar">
+          <span class="term-prompt">AL@codex:~$</span>
+          <input type="text" id="terminal-input" class="terminal-input" placeholder="commande..." autocomplete="off" />
+        </div>
+      </div>
 
-  </div><!-- /platform -->
+      <!-- TAB: SETTINGS -->
+      <div id="tab-settings" class="tab-content">
+        <div class="codex-topbar">
+          <span class="topbar-title">⚙️ Paramètres <span class="orange">AL</span></span>
+        </div>
+        <div class="settings-panel">
+          <div class="setting-row">
+            <label>Thème</label>
+            <select class="setting-select">
+              <option>Noir + Orange (défaut)</option>
+              <option>Sombre Bleu</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>Taille police</label>
+            <input type="range" min="12" max="20" value="14" class="setting-range" id="font-size-range" />
+            <span id="font-size-val" class="orange">14px</span>
+          </div>
+          <div class="setting-row">
+            <label>Modèle IA</label>
+            <select class="setting-select">
+              <option>GPT-4o</option>
+              <option>GPT-3.5-turbo</option>
+              <option>Claude 3</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>Version</label>
+            <span class="orange">TI-LEX-AL v2.0</span>
+          </div>
+        </div>
+      </div>
 
-  <script src="matrix.js"></script>
+    </main>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
