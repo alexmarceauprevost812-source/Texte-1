@@ -1,8 +1,0 @@
-{
-  "name": "ti-lex-al",
-  "version": "1.0.0",
-  "description": "TI-LEX-AL — L'intelligence du Québec",
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.20.0"
-  }
-}
