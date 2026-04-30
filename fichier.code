@@ -1,4 +1,10 @@
-1. Delete le projet sur Vercel
-2. Reimporte depuis GitHub
-3. Configure ben le Root Directory
-4. Redéploie!
+ti-lex-al/
+├── index.html          ← Page accueil (Matrix Rain + Logo)
+├── login.html          ← Connexion / Inscription  
+├── codex.html          ← Le CODEX (après connexion)
+├── css/
+│   └── style.css       ← Styles globaux
+└── js/
+    ├── matrix.js       ← Effet Matrix
+    ├── auth.js         ← Gestion connexion
+    └── codex.js        ← Le Codex vivant
