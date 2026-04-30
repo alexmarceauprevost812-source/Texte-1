@@ -1,61 +1,57 @@
-(function() {
-  const canvas  = document.getElementById('matrix-canvas');
-  const ctx     = canvas.getContext('2d');
+/**
+ * matrix.js — Pluie de caractères orange
+ */
+(function () {
+  const canvas = document.getElementById('matrix-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
 
-  // Caractères japonais + latins + chiffres
-  const CHARS = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&';
+  let W, H, cols, drops;
 
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>[]{}|アイウエオカキクケコサシスセソタチツテトナニヌネノ';
   const FONT_SIZE = 16;
-  let colonnes    = [];
-  let animId      = null;
 
-  function redimensionner() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const nbCols  = Math.floor(canvas.width / FONT_SIZE);
-    colonnes = Array.from({ length: nbCols }, () =>
-      Math.floor(Math.random() * -canvas.height / FONT_SIZE)
-    );
+  function init() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    cols  = Math.floor(W / FONT_SIZE);
+    drops = Array(cols).fill(1);
   }
 
-  function dessiner() {
-    // Traîne sombre semi-transparente
-    ctx.fillStyle = 'rgba(13, 13, 13, 0.05)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  function draw() {
+    // Traîne sombre
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+    ctx.fillRect(0, 0, W, H);
 
-    ctx.font = `${FONT_SIZE}px "Share Tech Mono", monospace`;
+    ctx.font = FONT_SIZE + 'px monospace';
 
-    colonnes.forEach((y, i) => {
+    for (let i = 0; i < drops.length; i++) {
       const char = CHARS[Math.floor(Math.random() * CHARS.length)];
-      const x    = i * FONT_SIZE;
+      const y    = drops[i] * FONT_SIZE;
 
-      // Tête de colonne = blanc brillant
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText(char, x, y * FONT_SIZE);
-
-      // Corps vert matrix
-      ctx.fillStyle = '#00ff41';
-      if (y > 2) {
-        const char2 = CHARS[Math.floor(Math.random() * CHARS.length)];
-        ctx.fillStyle = 'rgba(0,255,65,0.7)';
-        ctx.fillText(char2, x, (y - 1) * FONT_SIZE);
-      }
-
-      // Réinitialiser aléatoirement
-      if (y * FONT_SIZE > canvas.height && Math.random() > 0.975) {
-        colonnes[i] = 0;
+      // Tête de colonne = orange vif
+      if (drops[i] * FONT_SIZE < FONT_SIZE * 2) {
+        ctx.fillStyle = '#ffffff';
       } else {
-        colonnes[i]++;
+        // Dégradé orange → orange foncé selon la position
+        const ratio = Math.min(drops[i] / (H / FONT_SIZE), 1);
+        const r = 255;
+        const g = Math.floor(107 - ratio * 60);  // 107 → ~47
+        const b = 0;
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
       }
-    });
 
-    animId = requestAnimationFrame(dessiner);
+      ctx.fillText(char, i * FONT_SIZE, y);
+
+      // Reset aléatoire
+      if (y > H && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
   }
 
-  window.addEventListener('resize', redimensionner);
-  redimensionner();
-  dessiner();
-
-  // Exposer pour la transition
-  window.matrixAnimation = { stop: () => cancelAnimationFrame(animId) };
+  init();
+  window.addEventListener('resize', init);
+  setInterval(draw, 45);
 })();
