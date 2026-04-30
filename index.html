@@ -2,372 +2,480 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Texte-1 Codex</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ti-lex-al 🍁 — L'intelligence du Québec</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    /* ===== RESET & BASE ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #000;
-      color: #fff;
-      font-family: 'Caveat', cursive;
+      background: #020008;
+      font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
-      height: 100vh;
-      width: 100vw;
+      color: #fff;
     }
 
-    #matrixCanvas {
+    /* ===== CANVAS 3D EN FOND ===== */
+    #bg-canvas {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 0;
     }
 
-    /* ===== ÉCRAN INTRO ===== */
-    #intro {
+    /* ===== OVERLAY DE CONTENU ===== */
+    .overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 10;
-      transition: opacity 1s ease;
-      padding-top: 30vh;
-    }
-
-    #intro.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    #intro img {
-      width: 280px;
-      max-width: 80vw;
-      animation: logoPulse 4s ease-in-out;
-      filter: drop-shadow(0 0 30px #ff6600) drop-shadow(0 0 60px #ff6600);
-      z-index: 11;
-      position: relative;
-    }
-
-    @keyframes logoPulse {
-      0%   { opacity: 0; transform: scale(0.5); }
-      30%  { opacity: 1; transform: scale(1.05); }
-      70%  { opacity: 1; transform: scale(1); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    /* ===== PAGE PRINCIPALE (non connecté) ===== */
-    #mainPage {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding-top: 30vh;
-      z-index: 5;
-      opacity: 0;
       pointer-events: none;
-      transition: opacity 1s ease;
-      gap: 20px;
     }
 
-    #mainPage.visible {
-      opacity: 1;
-      pointer-events: all;
+    /* ===== LOGO & TITRE ===== */
+    .brand {
+      text-align: center;
+      animation: breatheUI 4s ease-in-out infinite;
     }
 
-    #mainPage .main-logo {
-      width: 160px;
-      max-width: 50vw;
-      margin-bottom: 30px;
-      filter: drop-shadow(0 0 15px #ff6600);
-      animation: floatLogo 3s ease-in-out infinite;
+    .brand-maple {
+      font-size: 4rem;
+      filter: drop-shadow(0 0 30px #ff4444);
+      animation: rotatemaple 8s linear infinite;
+      display: inline-block;
     }
 
-    @keyframes floatLogo {
-      0%, 100% { transform: translateY(0px); }
-      50%       { transform: translateY(-8px); }
+    .brand-title {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      background: linear-gradient(135deg, #ff0050, #7700ff, #00d4ff, #ff0050);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease-in-out infinite;
+      text-transform: uppercase;
     }
 
-    .codex-title {
-      font-family: 'Permanent Marker', cursive;
-      font-size: 3rem;
-      color: #ff6600;
-      text-shadow: 0 0 20px #ff6600, 0 0 40px #ff440055;
-      margin-bottom: 10px;
-      letter-spacing: 4px;
+    .brand-sub {
+      font-size: 1.1rem;
+      letter-spacing: 0.4em;
+      color: rgba(255,255,255,0.5);
+      margin-top: 0.5rem;
+      text-transform: uppercase;
     }
 
-    .codex-subtitle {
-      font-family: 'Caveat', cursive;
-      font-size: 1.4rem;
-      color: #ffffff99;
-      margin-bottom: 40px;
-      letter-spacing: 2px;
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .btn {
-      font-family: 'Permanent Marker', cursive;
-      font-size: 1.3rem;
-      padding: 14px 48px;
-      border-radius: 8px;
-      cursor: pointer;
-      letter-spacing: 2px;
-      transition: all 0.3s ease;
-    }
-
-    .btn-connexion {
-      background: transparent;
-      border: 2px solid #ff6600;
-      color: #ff6600;
-    }
-
-    .btn-connexion:hover {
-      background: #ff6600;
-      color: #000;
-      box-shadow: 0 0 25px #ff6600, 0 0 50px #ff440055;
-      transform: translateY(-3px);
-    }
-
-    .btn-inscription {
-      background: #ff6600;
-      border: 2px solid #ff6600;
-      color: #000;
-      box-shadow: 0 0 15px #ff440055;
-    }
-
-    .btn-inscription:hover {
-      background: #ff8800;
-      border-color: #ff8800;
-      box-shadow: 0 0 30px #ff6600, 0 0 60px #ff440077;
-      transform: translateY(-3px);
-    }
-
-    .divider {
-      width: 200px;
-      height: 1px;
-      background: linear-gradient(to right, transparent, #ff6600, transparent);
-      margin: 20px 0;
-    }
-
-    /* ===== BOUTON DÉCONNEXION (top right) ===== */
-    #btnDeconnexion {
-      position: fixed;
-      top: 20px;
-      right: 24px;
-      z-index: 100;
-      display: none;
-      font-family: 'Permanent Marker', cursive;
-      font-size: 1rem;
-      padding: 10px 24px;
-      border-radius: 8px;
-      background: transparent;
-      border: 2px solid #ff6600;
-      color: #ff6600;
-      cursor: pointer;
-      letter-spacing: 1px;
-      transition: all 0.3s ease;
-    }
-
-    #btnDeconnexion:hover {
-      background: #ff6600;
-      color: #000;
-      box-shadow: 0 0 20px #ff6600;
-      transform: translateY(-2px);
-    }
-
-    #btnDeconnexion.visible {
-      display: block;
-      animation: fadeInDown 0.5s ease;
-    }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-15px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== PAGE DASHBOARD (connecté) ===== */
-    #dashboard {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    /* ===== PULSE RING CENTRAL ===== */
+    .pulse-ring-container {
+      position: relative;
+      margin: 3rem 0;
+      width: 180px;
+      height: 180px;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 5;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 1s ease;
     }
 
-    #dashboard.visible {
-      opacity: 1;
+    .pulse-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid;
+      animation: pulseRing 4s ease-in-out infinite;
+    }
+
+    .pulse-ring:nth-child(1) {
+      width: 60px; height: 60px;
+      border-color: rgba(255,0,80,0.9);
+      animation-delay: 0s;
+    }
+    .pulse-ring:nth-child(2) {
+      width: 90px; height: 90px;
+      border-color: rgba(119,0,255,0.7);
+      animation-delay: 0.3s;
+    }
+    .pulse-ring:nth-child(3) {
+      width: 120px; height: 120px;
+      border-color: rgba(0,212,255,0.5);
+      animation-delay: 0.6s;
+    }
+    .pulse-ring:nth-child(4) {
+      width: 155px; height: 155px;
+      border-color: rgba(255,255,255,0.2);
+      animation-delay: 0.9s;
+    }
+
+    .core-dot {
+      width: 20px; height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow:
+        0 0 10px #fff,
+        0 0 30px #ff0050,
+        0 0 60px #7700ff;
+      animation: breatheUI 4s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    /* ===== BREATH TEXT ===== */
+    .breath-label {
+      font-size: 1rem;
+      letter-spacing: 0.3em;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      margin-top: -1rem;
+      animation: fadeBreath 4s ease-in-out infinite;
+    }
+
+    /* ===== STATS / TAGS ===== */
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
       pointer-events: all;
     }
 
-    #dashboard .welcome {
-      font-family: 'Permanent Marker', cursive;
-      font-size: 2rem;
-      color: #ff6600;
-      text-shadow: 0 0 20px #ff6600;
-      text-align: center;
+    .stat-chip {
+      padding: 0.5rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      cursor: default;
+      transition: all 0.3s ease;
+      animation: breatheUI 4s ease-in-out infinite;
     }
 
-    #dashboard .welcome span {
-      color: #fff;
-      font-size: 1.2rem;
-      display: block;
-      margin-top: 10px;
-      font-family: 'Caveat', cursive;
+    .stat-chip:hover {
+      border-color: rgba(0,212,255,0.6);
+      box-shadow: 0 0 20px rgba(0,212,255,0.3);
+      color: #00d4ff;
+    }
+
+    .stat-chip:nth-child(1) { animation-delay: 0.2s; }
+    .stat-chip:nth-child(2) { animation-delay: 0.4s; }
+    .stat-chip:nth-child(3) { animation-delay: 0.6s; }
+
+    /* ===== COIN BADGE ===== */
+    .badge {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      z-index: 20;
+    }
+
+    /* ===== KEYFRAMES ===== */
+    @keyframes breatheUI {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50%       { transform: scale(1.04); opacity: 1; }
+    }
+
+    @keyframes pulseRing {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+        box-shadow: 0 0 0px transparent;
+      }
+      50% {
+        transform: scale(1.25);
+        opacity: 0.2;
+        box-shadow: 0 0 20px currentColor;
+      }
+    }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes rotatemaple {
+      0%   { transform: rotate(0deg) scale(1); }
+      25%  { transform: rotate(10deg) scale(1.1); }
+      50%  { transform: rotate(0deg) scale(1); }
+      75%  { transform: rotate(-10deg) scale(1.1); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+
+    @keyframes fadeBreath {
+      0%, 100% { opacity: 0.3; letter-spacing: 0.3em; }
+      50%       { opacity: 0.9; letter-spacing: 0.5em; }
     }
   </style>
 </head>
 <body>
 
-  <canvas id="matrixCanvas"></canvas>
+<!-- 🎨 CANVAS 3D BACKGROUND -->
+<canvas id="bg-canvas"></canvas>
 
-  <!-- BOUTON DÉCONNEXION (fixed top right, visible seulement si connecté) -->
-  <button id="btnDeconnexion" onclick="deconnecter()">⏻ Déconnexion</button>
-
-  <!-- INTRO -->
-  <div id="intro">
-    <img src="logo.png" alt="Texte-1 Logo" />
+<!-- 🍁 UI OVERLAY -->
+<div class="overlay">
+  <div class="brand">
+    <div class="brand-maple">🍁</div>
+    <div class="brand-title">TI-LEX-AL</div>
+    <div class="brand-sub">L'intelligence du Québec</div>
   </div>
 
-  <!-- PAGE NON CONNECTÉ -->
-  <div id="mainPage">
-    <img src="logo.png" alt="Texte-1 Logo" class="main-logo" />
-    <h1 class="codex-title">TEXTE-1</h1>
-    <p class="codex-subtitle">Le Codex Vivant</p>
-    <div class="divider"></div>
-    <div class="btn-group">
-      <button class="btn btn-connexion" onclick="goTo('connexion')">Connexion</button>
-      <button class="btn btn-inscription" onclick="goTo('inscription')">Inscription</button>
-    </div>
+  <div class="pulse-ring-container">
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="core-dot"></div>
   </div>
 
-  <!-- PAGE CONNECTÉ -->
-  <div id="dashboard">
-    <div class="welcome">
-      Bienvenue dans le Codex !
-      <span>Le dashboard arrive bientôt... 🔥</span>
-    </div>
+  <div class="breath-label" id="breathLabel">INSPIRE</div>
+
+  <div class="stats">
+    <div class="stat-chip">🤖 IA Active</div>
+    <div class="stat-chip">🍁 Québec</div>
+    <div class="stat-chip">⚡ 3D Live</div>
   </div>
+</div>
 
-  <script>
-    // ===== MATRIX =====
-    const canvas = document.getElementById('matrixCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+<div class="badge">ti-lex-al © 2025 — TI-CODER 👑</div>
 
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()テキストコードΨΩΔΣ';
-    const fontSize = 16;
-    const columns  = Math.floor(canvas.width / fontSize);
-    const drops    = Array(columns).fill(1);
+<!-- ===== THREE.JS CDN ===== -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.font = fontSize + 'px monospace';
-      for (let i = 0; i < drops.length; i++) {
-        const char = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillStyle = Math.random() > 0.95 ? '#ffffff' : '#ff6600';
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      }
-    }
+<script>
+// ====================================================
+// 👑 TI-CODER — MOTEUR 3D BREATHING VIVANT
+// 🍁 ti-lex-al — L'intelligence du Québec
+// ====================================================
 
-    const matrixInterval = setInterval(drawMatrix, 35);
+const canvas = document.getElementById('bg-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x020008, 1);
 
-    window.addEventListener('resize', () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
 
-    // ===== INTRO 4 SEC =====
-    setTimeout(() => {
-      const intro    = document.getElementById('intro');
-      const mainPage = document.getElementById('mainPage');
-      intro.classList.add('fade-out');
-      setTimeout(() => {
-        intro.style.display = 'none';
-        mainPage.classList.add('visible');
-        clearInterval(matrixInterval);
-        setInterval(drawMatrix, 80);
-      }, 1000);
-    }, 4000);
+// -------- 🌊 BREATHING GLOBAL CLOCK --------
+let breathTime = 0;
+const BREATH_SPEED = 0.008; // vitesse de respiration
 
-    // ===== ÉTAT CONNEXION =====
-    let estConnecte = false;
+// -------- ⭐ PARTICULES 3D (ÉTOILES) --------
+const PARTICLE_COUNT = 3000;
+const particleGeo = new THREE.BufferGeometry();
+const positions    = new Float32Array(PARTICLE_COUNT * 3);
+const colors       = new Float32Array(PARTICLE_COUNT * 3);
+const sizes        = new Float32Array(PARTICLE_COUNT);
+const basePositions = new Float32Array(PARTICLE_COUNT * 3);
 
-    function goTo(page) {
-      if (page === 'connexion') {
-        // Simule une connexion — remplacer par Supabase Auth
-        connecter('Utilisateur');
-      } else if (page === 'inscription') {
-        alert('Page inscription — à connecter à Supabase !');
-      }
-    }
+const colorPalette = [
+  new THREE.Color(0xff0050), // rouge
+  new THREE.Color(0x7700ff), // violet
+  new THREE.Color(0x00d4ff), // cyan
+  new THREE.Color(0xffffff), // blanc
+  new THREE.Color(0xff6600), // orange
+];
 
-    function connecter(nomUser) {
-      estConnecte = true;
-      // Cache la page principale
-      const mainPage = document.getElementById('mainPage');
-      mainPage.classList.remove('visible');
-      setTimeout(() => mainPage.style.display = 'none', 500);
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+  // Position sphérique aléatoire
+  const theta = Math.random() * Math.PI * 2;
+  const phi   = Math.acos(2 * Math.random() - 1);
+  const r     = 2 + Math.random() * 8;
 
-      // Montre le dashboard
-      const dashboard = document.getElementById('dashboard');
-      dashboard.classList.add('visible');
+  const x = r * Math.sin(phi) * Math.cos(theta);
+  const y = r * Math.sin(phi) * Math.sin(theta);
+  const z = r * Math.cos(phi);
 
-      // Montre le bouton déconnexion
-      const btnDeco = document.getElementById('btnDeconnexion');
-      btnDeco.classList.add('visible');
-    }
+  positions[i*3]   = x;
+  positions[i*3+1] = y;
+  positions[i*3+2] = z;
 
-    function deconnecter() {
-      estConnecte = false;
-      // Cache le dashboard
-      const dashboard = document.getElementById('dashboard');
-      dashboard.classList.remove('visible');
+  basePositions[i*3]   = x;
+  basePositions[i*3+1] = y;
+  basePositions[i*3+2] = z;
 
-      // Cache le bouton déconnexion
-      const btnDeco = document.getElementById('btnDeconnexion');
-      btnDeco.classList.remove('visible');
+  // Couleur aléatoire de la palette
+  const c = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+  colors[i*3]   = c.r;
+  colors[i*3+1] = c.g;
+  colors[i*3+2] = c.b;
 
-      // Montre la page principale
-      const mainPage = document.getElementById('mainPage');
-      mainPage.style.display = 'flex';
-      setTimeout(() => mainPage.classList.add('visible'), 50);
-    }
-  </script>
+  sizes[i] = Math.random() * 3 + 1;
+}
 
+particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+particleGeo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+particleGeo.setAttribute('size',     new THREE.BufferAttribute(sizes, 1));
+
+const particleMat = new THREE.PointsMaterial({
+  size: 0.04,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.85,
+  sizeAttenuation: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+});
+
+const particles = new THREE.Points(particleGeo, particleMat);
+scene.add(particles);
+
+// -------- 🔮 SPHÈRE CENTRALE WIREFRAME --------
+const sphereGeo  = new THREE.IcosahedronGeometry(1.2, 4);
+const sphereMat  = new THREE.MeshBasicMaterial({
+  color: 0x7700ff,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.15,
+});
+const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+scene.add(sphere);
+
+// -------- 💠 ANNEAU INTÉRIEUR --------
+const ring1Geo = new THREE.TorusGeometry(1.6, 0.004, 16, 120);
+const ring1Mat = new THREE.MeshBasicMaterial({
+  color: 0x00d4ff,
+  transparent: true,
+  opacity: 0.4,
+  blending: THREE.AdditiveBlending,
+});
+const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
+ring1.rotation.x = Math.PI / 3;
+scene.add(ring1);
+
+// -------- 💠 ANNEAU EXTÉRIEUR --------
+const ring2Geo = new THREE.TorusGeometry(2.2, 0.003, 16, 120);
+const ring2Mat = new THREE.MeshBasicMaterial({
+  color: 0xff0050,
+  transparent: true,
+  opacity: 0.25,
+  blending: THREE.AdditiveBlending,
+});
+const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+ring2.rotation.x = -Math.PI / 4;
+ring2.rotation.y = Math.PI / 6;
+scene.add(ring2);
+
+// -------- ✨ LUMIÈRES --------
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+scene.add(ambientLight);
+
+const pointLight1 = new THREE.PointLight(0xff0050, 2, 10);
+pointLight1.position.set(3, 3, 3);
+scene.add(pointLight1);
+
+const pointLight2 = new THREE.PointLight(0x00d4ff, 2, 10);
+pointLight2.position.set(-3, -3, 2);
+scene.add(pointLight2);
+
+// -------- 🖱️ MOUSE PARALLAX --------
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// -------- 🌬️ BREATH LABEL SYNC --------
+const breathLabel = document.getElementById('breathLabel');
+const breathPhases = ['INSPIRE', 'RETIENS', 'EXPIRE', 'PAUSE'];
+let lastPhaseIdx = -1;
+
+function getBreathPhase(t) {
+  const cycle = (t % (Math.PI * 2)) / (Math.PI * 2); // 0 → 1
+  if (cycle < 0.35) return 0; // inspire
+  if (cycle < 0.5)  return 1; // retiens
+  if (cycle < 0.85) return 2; // expire
+  return 3;                   // pause
+}
+
+// -------- 🔄 BOUCLE D'ANIMATION PRINCIPALE --------
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  const delta = clock.getDelta();
+  breathTime += BREATH_SPEED;
+
+  // Facteur de respiration : 0 → 1 → 0 (sinusoïde douce)
+  const breathFactor = (Math.sin(breathTime) + 1) / 2;
+
+  // --- Sphère centrale : scale + rotation ---
+  const sphereScale = 0.85 + breathFactor * 0.3;
+  sphere.scale.setScalar(sphereScale);
+  sphere.rotation.y += 0.003;
+  sphere.rotation.x += 0.001;
+  sphereMat.opacity = 0.08 + breathFactor * 0.18;
+
+  // --- Anneaux : scale + rotation ---
+  const ringScale = 0.9 + breathFactor * 0.2;
+  ring1.scale.setScalar(ringScale);
+  ring1.rotation.z += 0.004;
+  ring1.rotation.x += 0.002;
+  ring1Mat.opacity = 0.15 + breathFactor * 0.5;
+
+  ring2.scale.setScalar(ringScale * 0.95);
+  ring2.rotation.z -= 0.003;
+  ring2.rotation.y += 0.002;
+  ring2Mat.opacity = 0.08 + breathFactor * 0.35;
+
+  // --- Particules : expansion/contraction (RESPIRATION) ---
+  const posArr = particleGeo.attributes.position.array;
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const bx = basePositions[i*3];
+    const by = basePositions[i*3+1];
+    const bz = basePositions[i*3+2];
+
+    // Chaque particule a une légère variation de phase (organique)
+    const offset = (i * 0.00123) % (Math.PI * 2);
+    const bf = (Math.sin(breathTime + offset) + 1) / 2;
+    const expandFactor = 1 + bf * 0.18;
+
+    posArr[i*3]   = bx * expandFactor;
+    posArr[i*3+1] = by * expandFactor;
+    posArr[i*3+2] = bz * expandFactor;
+  }
+  particleGeo.attributes.position.needsUpdate = true;
+  particleMat.opacity = 0.6 + breathFactor * 0.35;
+
+  // --- Lumières : pulsent avec la respiration ---
+  pointLight1.intensity = 1.5 + breathFactor * 2.5;
+  pointLight2.intensity = 1.5 + breathFactor * 2.5;
+  pointLight1.color.setHSL(0.95 + breathFactor * 0.1, 1, 0.5);
+  pointLight2.color.setHSL(0.55 + breathFactor * 0.05, 1, 0.5);
+
+  // --- Camera : mouse parallax doux ---
+  camera.position.x += (mouseX * 0.8 - camera.position.x) * 0.03;
+  camera.position.y += (-mouseY * 0.8 - camera.position.y) * 0.03;
+  camera.lookAt(scene.position);
+
+  // --- Label respiration ---
+  const phaseIdx = getBreathPhase(breathTime);
+  if (phaseIdx !== lastPhaseIdx) {
+    lastPhaseIdx = phaseIdx;
+    breathLabel.textContent = breathPhases[phaseIdx];
+  }
+
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// -------- 📐 RESIZE RESPONSIVE --------
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
 </body>
 </html>
