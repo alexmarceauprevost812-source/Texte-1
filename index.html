@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TI-LEX-AL Chat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- BOUTON TOGGLE MENU -->
+  <button class="menu-toggle" id="menuToggle">☰</button>
+
+  <!-- MENU LATÉRAL GAUCHE -->
+  <aside class="sidebar" id="sidebar">
+    <h2>💬 Discussions</h2>
+    <ul class="discussion-list">
+      <li class="discussion-item active">🗨️ Conversation 1</li>
+      <li class="discussion-item">🗨️ Conversation 2</li>
+      <li class="discussion-item">🗨️ Conversation 3</li>
+      <li class="discussion-item">🗨️ Conversation 4</li>
+      <li class="discussion-item">🗨️ Conversation 5</li>
+    </ul>
+    <button class="new-chat-btn">＋ Nouvelle discussion</button>
+  </aside>
+
+  <!-- OVERLAY pour fermer le menu en cliquant à côté -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ZONE PRINCIPALE -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ZONE DES MESSAGES -->
+    <div class="chat-window" id="chatWindow">
+      <div class="message bot">
+        <span>Salut! Chu TI-LEX-AL. Comment je peux t'aider aujourd'hui? 🍁</span>
+      </div>
+    </div>
+
+    <!-- BULLE DE CHAT EN BAS -->
+    <div class="chat-bar">
+      <textarea
+        class="chat-input"
+        id="chatInput"
+        placeholder="Écris ton message..."
+        rows="1"
+      ></textarea>
+      <button class="send-btn" id="sendBtn">➤</button>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
