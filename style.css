@@ -29,10 +29,7 @@ body {
   cursor: pointer;
   transition: background 0.2s;
 }
-
-.menu-toggle:hover {
-  background: #ff6a00;
-}
+.menu-toggle:hover { background: #ff6a00; }
 
 /* ─── SIDEBAR ─── */
 .sidebar {
@@ -50,10 +47,7 @@ body {
   transition: left 0.3s ease;
   gap: 16px;
 }
-
-.sidebar.open {
-  left: 0;
-}
+.sidebar.open { left: 0; }
 
 .sidebar h2 {
   font-size: 16px;
@@ -80,7 +74,6 @@ body {
   color: #cccccc;
   transition: background 0.2s, color 0.2s;
 }
-
 .discussion-item:hover,
 .discussion-item.active {
   background: #1f1f1f;
@@ -98,10 +91,7 @@ body {
   cursor: pointer;
   transition: background 0.2s;
 }
-
-.new-chat-btn:hover {
-  background: #e05e00;
-}
+.new-chat-btn:hover { background: #e05e00; }
 
 /* ─── OVERLAY ─── */
 .overlay {
@@ -111,10 +101,7 @@ body {
   background: rgba(0,0,0,0.5);
   z-index: 800;
 }
-
-.overlay.active {
-  display: block;
-}
+.overlay.active { display: block; }
 
 /* ─── CONTENU PRINCIPAL ─── */
 .main-content {
@@ -123,7 +110,6 @@ body {
   flex-direction: column;
   height: 100vh;
   padding-top: 72px;
-  transition: margin-left 0.3s ease;
 }
 
 /* ─── FENÊTRE DE CHAT ─── */
@@ -135,10 +121,7 @@ body {
   flex-direction: column;
   gap: 14px;
 }
-
-.chat-window::-webkit-scrollbar {
-  width: 6px;
-}
+.chat-window::-webkit-scrollbar { width: 6px; }
 .chat-window::-webkit-scrollbar-thumb {
   background: #333;
   border-radius: 3px;
@@ -153,14 +136,12 @@ body {
   line-height: 1.5;
   word-wrap: break-word;
 }
-
 .message.bot {
   background: #1a1a1a;
   color: #ffffff;
   align-self: flex-start;
   border-bottom-left-radius: 4px;
 }
-
 .message.user {
   background: #ff6a00;
   color: #ffffff;
@@ -168,16 +149,131 @@ body {
   border-bottom-right-radius: 4px;
 }
 
-/* ─── BARRE DE CHAT EN BAS ─── */
+/* ─── APERÇU FICHIERS JOINTS ─── */
+.preview-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 20px 8px;
+  background: #111111;
+}
+
+.preview-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 13px;
+  color: #cccccc;
+  max-width: 200px;
+}
+.preview-chip span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.preview-chip .remove-chip {
+  cursor: pointer;
+  color: #ff6a00;
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.preview-chip .remove-chip:hover { color: #e05e00; }
+
+.preview-thumb {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+/* ─── BARRE DE CHAT ─── */
 .chat-bar {
   display: flex;
   align-items: flex-end;
   gap: 10px;
-  padding: 16px 20px;
+  padding: 12px 20px 16px;
   background: #111111;
   border-top: 1px solid #1f1f1f;
 }
 
+/* ─── BOUTON PLUS ─── */
+.attach-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.attach-btn {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  color: #ff6a00;
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.15s;
+  line-height: 1;
+}
+.attach-btn:hover {
+  background: #ff6a00;
+  color: #ffffff;
+}
+.attach-btn.active {
+  transform: rotate(45deg);
+  background: #ff6a00;
+  color: #ffffff;
+}
+
+/* ─── MENU PIÈCES JOINTES ─── */
+.attach-menu {
+  position: absolute;
+  bottom: 58px;
+  left: 0;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 500;
+}
+.attach-menu.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+.attach-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #cccccc;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.attach-item:hover {
+  background: #ff6a00;
+  color: #ffffff;
+}
+
+/* ─── INPUT CHAT ─── */
 .chat-input {
   flex: 1;
   background: #1a1a1a;
@@ -193,16 +289,10 @@ body {
   line-height: 1.5;
   transition: border 0.2s;
 }
+.chat-input::placeholder { color: #555; }
+.chat-input:focus { border-color: #ff6a00; }
 
-.chat-input::placeholder {
-  color: #555;
-}
-
-.chat-input:focus {
-  border-color: #ff6a00;
-}
-
-/* ─── BOUTON ENVOYER ORANGE ─── */
+/* ─── BOUTON ENVOYER ─── */
 .send-btn {
   background: #ff6a00;
   border: none;
@@ -218,11 +308,5 @@ body {
   transition: background 0.2s, transform 0.1s;
   flex-shrink: 0;
 }
-
-.send-btn:hover {
-  background: #e05e00;
-}
-
-.send-btn:active {
-  transform: scale(0.95);
-}
+.send-btn:hover { background: #e05e00; }
+.send-btn:active { transform: scale(0.95); }
