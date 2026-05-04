@@ -76,7 +76,10 @@ export function ChatInterface({
 
       try {
         const history: Message[] = [...messages, userMessage];
-        for await (const event of streamChat(history, model, controller.signal)) {
+        for await (const event of streamChat(history, model, {
+          mode: "codex",
+          signal: controller.signal,
+        })) {
           if (event.type === "text") {
             setMessages((prev) =>
               prev.map((m) =>

@@ -82,13 +82,19 @@ export async function filesToAttachments(
   return out;
 }
 
+export type StreamChatOptions = {
+  mode?: "codex" | "general";
+  signal?: AbortSignal;
+};
+
 export async function* streamChat(
   messages: ClientMessage[],
   model: ModelId,
-  signal?: AbortSignal,
+  options: StreamChatOptions = {},
 ): AsyncGenerator<ChatStreamEvent> {
   const payload = {
     model,
+    mode: options.mode ?? "codex",
     messages: messages.map((m) => ({
       role: m.role,
       content: m.content,
@@ -104,7 +110,7 @@ export async function* streamChat(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
-    signal,
+    signal: options.signal,
   });
 
   if (!response.ok) {

@@ -1,7 +1,12 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 
-import { getAnthropicClient, SYSTEM_PROMPT } from "@/lib/chat/anthropic";
+import {
+  getAnthropicClient,
+  getSystemPrompt,
+  isChatMode,
+  type ChatMode,
+} from "@/lib/chat/anthropic";
 import {
   buildContentBlocks,
   type IncomingAttachment,
@@ -21,6 +26,7 @@ type IncomingMessage = {
 type RequestBody = {
   messages: IncomingMessage[];
   model?: ModelId;
+  mode?: ChatMode;
 };
 
 function jsonError(message: string, status: number): Response {
@@ -74,6 +80,8 @@ export async function POST(req: NextRequest) {
   }
 
   const model: ModelId = isModelId(body.model) ? body.model : DEFAULT_MODEL;
+  const mode: ChatMode = isChatMode(body.mode) ? body.mode : "codex";
+  const systemPrompt = getSystemPrompt(mode);
 
   let messages: Anthropic.MessageParam[];
   try {
@@ -110,7 +118,7 @@ export async function POST(req: NextRequest) {
           system: [
             {
               type: "text",
-              text: SYSTEM_PROMPT,
+              text: systemPrompt,
               cache_control: { type: "ephemeral" },
             },
           ],

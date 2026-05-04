@@ -74,3 +74,13 @@ body {
   background: var(--accent);
   color: var(--accent-text);
 }
+
+@keyframes codex-ghost-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.codex-ghost-float {
+  display: inline-flex;
+  animation: codex-ghost-float 2.4s ease-in-out infinite;
+}

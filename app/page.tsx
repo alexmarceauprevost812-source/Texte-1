@@ -1,5 +1,6 @@
 import { AuthButton } from "@/components/auth-button";
 import { ChatInterface } from "@/components/chat-interface";
+import { GhostChat } from "@/components/ghost-chat";
 import { ModelPicker } from "@/components/model-picker";
 import { Sidebar } from "@/components/sidebar";
 import { VideoStage } from "@/components/video-stage";
@@ -35,6 +36,7 @@ export default async function Home() {
               ) : null}
             </div>
             <div className="flex items-center gap-3">
+              <GhostChat />
               <ModelPicker />
               <AuthButton user={user} enabled={authEnabled} />
             </div>
