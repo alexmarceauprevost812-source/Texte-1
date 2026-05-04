@@ -11,12 +11,9 @@
 </head>
 <body>
 
-  <!-- ===== TOPBAR ===== -->
   <header class="topbar">
     <div class="topbar-left">
-      <button class="sidebar-toggle" id="sidebarToggle" title="Menu">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="sidebar-toggle" id="sidebarToggle"><span></span><span></span><span></span></button>
       <div class="logo">🧠 Codex</div>
     </div>
 
@@ -26,20 +23,26 @@
 
     <div class="topbar-right">
 
-      <!-- GitHub -->
+      <!-- MODE PERFORMANCE -->
+      <button class="top-btn perf-btn" id="perfBtn" title="Mode Performance">
+        <span class="perf-icon">⚡</span>
+        <span id="perfLabel">Performance</span>
+      </button>
+
+      <!-- GITHUB -->
       <div class="top-btn-group">
         <button class="top-btn" id="githubBtn">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
           <span id="githubLabel">GitHub</span>
         </button>
         <div class="dropdown" id="githubDropdown">
           <div class="dropdown-header">🐙 Connexion GitHub</div>
           <label>Token personnel (PAT)</label>
           <input type="password" id="githubToken" placeholder="ghp_..." />
-          <label>Repo (optionnel)</label>
+          <label>Repo cible</label>
           <input type="text" id="githubRepo" placeholder="user/mon-repo" />
+          <label>Branche (défaut: main)</label>
+          <input type="text" id="githubBranch" placeholder="main" />
           <button class="dropdown-save" id="githubSave">Connecter</button>
           <span class="connect-status" id="githubStatus"></span>
           <div class="dropdown-divider"></div>
@@ -47,13 +50,10 @@
         </div>
       </div>
 
-      <!-- Supabase -->
+      <!-- SUPABASE -->
       <div class="top-btn-group">
         <button class="top-btn" id="supabaseBtn">
-          <svg viewBox="0 0 109 113" fill="none" width="16" height="16">
-            <path d="M63.7 110.3c-2.5 3.2-7.8 1.5-7.9-2.5L54.6 62H2.5c-3.6 0-5.5-4.3-3-6.8L45.3 2.7c2.5-3.2 7.8-1.5 7.9 2.5L54.4 51h52.1c3.6 0 5.5 4.3 3 6.8l-45.8 52.5z" fill="url(#spb)"/>
-            <defs><linearGradient id="spb" x1="109" y1="0" x2="0" y2="113" gradientUnits="userSpaceOnUse"><stop stop-color="#249361"/><stop offset="1" stop-color="#3ecf8e"/></linearGradient></defs>
-          </svg>
+          <svg viewBox="0 0 109 113" fill="none" width="16" height="16"><path d="M63.7 110.3c-2.5 3.2-7.8 1.5-7.9-2.5L54.6 62H2.5c-3.6 0-5.5-4.3-3-6.8L45.3 2.7c2.5-3.2 7.8-1.5 7.9 2.5L54.4 51h52.1c3.6 0 5.5 4.3 3 6.8l-45.8 52.5z" fill="url(#spb)"/><defs><linearGradient id="spb" x1="109" y1="0" x2="0" y2="113" gradientUnits="userSpaceOnUse"><stop stop-color="#249361"/><stop offset="1" stop-color="#3ecf8e"/></linearGradient></defs></svg>
           <span id="supabaseLabel">Supabase</span>
         </button>
         <div class="dropdown" id="supabaseDropdown">
@@ -65,11 +65,23 @@
           <button class="dropdown-save" id="supabaseSave">Connecter</button>
           <span class="connect-status" id="supabaseStatus"></span>
           <div class="dropdown-divider"></div>
+          <div class="sb-sql-hint">
+            <span>Table requise :</span>
+            <button class="copy-sql-btn" id="copySqlBtn">📋 Copier le SQL</button>
+          </div>
+          <pre class="sql-preview">CREATE TABLE codex_files (
+  id uuid default gen_random_uuid() primary key,
+  filename text not null,
+  language text,
+  content text not null,
+  conversation_id text,
+  pushed_at timestamp default now()
+);</pre>
           <a class="dropdown-link" href="https://supabase.com/dashboard" target="_blank">→ Ouvrir Supabase Dashboard</a>
         </div>
       </div>
 
-      <!-- Anthropic -->
+      <!-- ANTHROPIC -->
       <div class="top-btn-group">
         <button class="top-btn" id="apiBtn">🔑 <span id="apiLabel">API</span></button>
         <div class="dropdown" id="apiDropdown">
@@ -87,10 +99,7 @@
     </div>
   </header>
 
-  <!-- ===== BODY ===== -->
   <div class="app-body">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-inner">
         <button class="new-chat-btn" id="newChatBtn">＋ Nouvelle conversation</button>
@@ -101,7 +110,6 @@
 
     <div class="overlay" id="overlay"></div>
 
-    <!-- MAIN -->
     <main class="main">
       <div class="chat-messages" id="chatMessages">
         <div class="welcome-screen" id="welcomeScreen">
@@ -109,29 +117,31 @@
           <h1>Bienvenue dans Codex</h1>
           <p>Propulsé par <strong>Claude d'Anthropic</strong>.<br/>Entre ta clé API en haut à droite pour commencer.</p>
           <div class="chips">
-            <button class="chip" onclick="setInput('Explique-moi le machine learning simplement')">💡 Machine learning</button>
-            <button class="chip" onclick="setInput('Écris un composant React avec un formulaire')">⚛️ Composant React</button>
-            <button class="chip" onclick="setInput('Aide-moi à déboguer ce code JavaScript')">🐛 Debug JS</button>
-            <button class="chip" onclick="setInput('Rédige-moi un README pour mon projet GitHub')">📄 README GitHub</button>
+            <button class="chip" onclick="setInput('Optimise ce code pour la performance maximale et explique chaque amélioration')">⚡ Optimiser du code</button>
+            <button class="chip" onclick="setInput('Écris un composant React performant avec mémoïsation')">⚛️ React perf</button>
+            <button class="chip" onclick="setInput('Analyse la complexité algorithmique et propose des améliorations')">📊 Analyse O(n)</button>
+            <button class="chip" onclick="setInput('Crée une API REST Node.js ultra-rapide avec cache')">🚀 API rapide</button>
           </div>
         </div>
       </div>
 
       <div class="input-container">
+        <div class="perf-indicator" id="perfIndicator" style="display:none">
+          ⚡ Mode Performance actif — Claude optimise chaque ligne de code au max
+        </div>
         <div class="input-box">
           <textarea id="chatInput" placeholder="Écris ton message à Claude... (Shift+Enter = nouvelle ligne)" rows="1"></textarea>
           <button class="send-btn" id="sendBtn" disabled>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="17" height="17">
-              <line x1="22" y1="2" x2="11" y2="13"/>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
         <p class="disclaimer">Codex peut faire des erreurs — vérifie toujours les infos importantes.</p>
       </div>
     </main>
-
   </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div class="toast-container" id="toastContainer"></div>
 
   <script src="script.js"></script>
 </body>
