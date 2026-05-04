@@ -28,7 +28,12 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  await supabase.auth.getUser();
+  try {
+    await supabase.auth.getUser();
+  } catch {
+    // Network errors or invalid config — let the request through
+    // without a refreshed session rather than 500 the whole site.
+  }
   return response;
 }
 

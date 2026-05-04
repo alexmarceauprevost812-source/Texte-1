@@ -1,3 +1,5 @@
+import type { User } from "@supabase/supabase-js";
+
 import { AuthButton } from "@/components/auth-button";
 import { ChatInterface } from "@/components/chat-interface";
 import { GhostChat } from "@/components/ghost-chat";
@@ -9,17 +11,23 @@ import { getGitInfo } from "@/lib/git-info";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createServerClient } from "@/lib/supabase/server";
 
+async function getCurrentUser(): Promise<User | null> {
+  try {
+    const supabase = await createServerClient();
+    if (!supabase) return null;
+    const { data, error } = await supabase.auth.getUser();
+    if (error) return null;
+    return data.user;
+  } catch {
+    // Network errors, invalid Supabase config, etc. — render as logged out.
+    return null;
+  }
+}
+
 export default async function Home() {
   const authEnabled = isSupabaseConfigured();
-  const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = supabase
-    ? await supabase.auth.getUser()
-    : { data: { user: null } };
-
-  const gitInfo = await getGitInfo();
   const aiEnabled = isAnthropicConfigured();
+  const [user, gitInfo] = await Promise.all([getCurrentUser(), getGitInfo()]);
 
   return (
     <main className="relative min-h-screen overflow-hidden">
