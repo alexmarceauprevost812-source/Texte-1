@@ -4,7 +4,15 @@ Application de chat style ChatGPT avec :
 - Une vidéo d'intro (4 secondes en plein écran)
 - Puis cette même vidéo en fond à 40 % d'opacité
 - Une interface de chat aux bulles et boutons arrondis
-- Authentification GitHub via Supabase Auth
+- Thème sombre par défaut + sélecteur de couleur d'accent (orange, bleu,
+  jaune, rose, violet, rouge, vert, gris, blanc)
+- Sidebar gauche avec accès aux **Paramètres** (apparence, personnalisation,
+  reconnaissance vocale, données)
+- Bouton **+** pour joindre des fichiers (incluant `.zip`)
+- Bouton **micro** pour dicter à la voix (Web Speech API)
+- Barre meta au-dessus de l'input : nom de la branche Git à gauche,
+  compteurs `+lignes`/`−lignes` à droite (vert/rouge subtil)
+- Authentification GitHub via Supabase Auth (optionnelle)
 
 ## Démarrage
 
@@ -30,7 +38,12 @@ Déposez votre fichier vidéo ici : `public/videos/background.mp4`.
 
 1. Créez un projet sur https://supabase.com.
 2. Récupérez l'URL et la clé `anon` dans **Project Settings → API**.
-3. Renseignez-les dans `.env.local`.
+3. Renseignez-les dans `.env.local` (ou dans les variables d'environnement
+   de Vercel : **Project Settings → Environment Variables**).
+
+> Sans ces variables, l'application fonctionne quand même : l'auth GitHub
+> est simplement désactivée (un badge « Auth non configurée » s'affiche
+> au lieu du bouton de connexion). Cela évite l'erreur 500 au déploiement.
 
 ## Connexion GitHub (OAuth via Supabase)
 

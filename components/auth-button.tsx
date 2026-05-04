@@ -1,15 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 
-export function AuthButton({ user }: { user: User | null }) {
+export function AuthButton({
+  user,
+  enabled,
+}: {
+  user: User | null;
+  enabled: boolean;
+}) {
   const router = useRouter();
 
   async function signInWithGitHub() {
     const supabase = createClient();
+    if (!supabase) return;
     await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
@@ -20,8 +27,20 @@ export function AuthButton({ user }: { user: User | null }) {
 
   async function signOut() {
     const supabase = createClient();
+    if (!supabase) return;
     await supabase.auth.signOut();
     router.refresh();
+  }
+
+  if (!enabled) {
+    return (
+      <span
+        className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/60"
+        title="Configurez NEXT_PUBLIC_SUPABASE_URL et NEXT_PUBLIC_SUPABASE_ANON_KEY"
+      >
+        Auth non configurée
+      </span>
+    );
   }
 
   if (user) {
@@ -33,6 +52,7 @@ export function AuthButton({ user }: { user: User | null }) {
       <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur">
         <span className="text-sm text-white/80">{label}</span>
         <button
+          type="button"
           onClick={signOut}
           className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white transition hover:bg-white/20"
         >
@@ -44,8 +64,9 @@ export function AuthButton({ user }: { user: User | null }) {
 
   return (
     <button
+      type="button"
       onClick={signInWithGitHub}
-      className="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-black shadow-lg transition hover:bg-white/90"
+      className="flex items-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--accent-text)] shadow-lg transition hover:opacity-90"
     >
       <GitHubIcon />
       Se connecter avec GitHub

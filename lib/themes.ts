@@ -1,0 +1,17 @@
+export const ACCENT_COLORS = [
+  { id: "orange", label: "Orange", value: "#f97316", textOn: "#000000" },
+  { id: "blue", label: "Bleu", value: "#3b82f6", textOn: "#ffffff" },
+  { id: "yellow", label: "Jaune", value: "#eab308", textOn: "#000000" },
+  { id: "pink", label: "Rose", value: "#ec4899", textOn: "#ffffff" },
+  { id: "purple", label: "Violet", value: "#8b5cf6", textOn: "#ffffff" },
+  { id: "red", label: "Rouge", value: "#ef4444", textOn: "#ffffff" },
+  { id: "green", label: "Vert", value: "#22c55e", textOn: "#000000" },
+  { id: "gray", label: "Gris", value: "#6b7280", textOn: "#ffffff" },
+  { id: "white", label: "Blanc", value: "#ffffff", textOn: "#000000" },
+] as const;
+
+export type AccentId = (typeof ACCENT_COLORS)[number]["id"];
+
+export const DEFAULT_ACCENT: AccentId = "orange";
+
+export const STORAGE_KEY = "codex-accent";
