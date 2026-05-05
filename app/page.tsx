@@ -29,9 +29,9 @@ export default async function Home() {
   const [user, gitInfo] = await Promise.all([getCurrentUser(), getGitInfo()]);
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
+    <main className="relative min-h-dvh overflow-hidden">
       <Sidebar />
-      <div className="ml-16 flex min-h-screen flex-col">
+      <div className="ml-16 flex min-h-dvh flex-col">
         <header className="flex items-center justify-between gap-4 px-6 py-4">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-semibold tracking-tight">Codex</h1>
