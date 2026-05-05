@@ -137,7 +137,7 @@ export function GhostChat() {
           style={{ background: "var(--accent)" }}
           aria-hidden="true"
         />
-        <span className="codex-ghost-float relative">
+        <span className="codex-ghost-respire relative">
           <GhostIcon active={open} />
         </span>
       </button>

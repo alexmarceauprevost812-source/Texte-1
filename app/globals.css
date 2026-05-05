@@ -26,6 +26,11 @@
   --border-soft: rgba(255, 255, 255, 0.1);
   --border-medium: rgba(255, 255, 255, 0.2);
 
+  /* Ghost pulse colors — light mode swaps these in to keep the
+     ghost visible against the white background. */
+  --ghost-color-bright: #ffffff;
+  --ghost-color-dim: #9a9a9a;
+
   color-scheme: dark;
 }
 
@@ -48,6 +53,9 @@
 
   --border-soft: rgba(0, 0, 0, 0.12);
   --border-medium: rgba(0, 0, 0, 0.2);
+
+  --ghost-color-bright: #1a1a1a;
+  --ghost-color-dim: #707070;
 
   color-scheme: light;
 }
@@ -75,12 +83,28 @@ body {
   color: var(--accent-text);
 }
 
-@keyframes codex-ghost-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
+/* Slow, calm "breath" — the ghost gently rises and expands. */
+@keyframes codex-ghost-breathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.07); }
 }
 
-.codex-ghost-float {
+/* Faster color pulse white → grey → white over 2s. */
+@keyframes codex-ghost-pulse {
+  0%, 100% { color: var(--ghost-color-bright); }
+  50% { color: var(--ghost-color-dim); }
+}
+
+.codex-ghost-respire {
   display: inline-flex;
-  animation: codex-ghost-float 2.4s ease-in-out infinite;
+  color: var(--ghost-color-bright);
+  animation:
+    codex-ghost-breathe 5s ease-in-out infinite,
+    codex-ghost-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .codex-ghost-respire {
+    animation: none;
+  }
 }
