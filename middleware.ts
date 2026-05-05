@@ -2,17 +2,16 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { getSupabaseEnv } from "@/lib/supabase/env";
-
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  const env = getSupabaseEnv();
-  if (!env) return response;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !anonKey) return response;
 
-  const supabase: SupabaseClient = createServerClient(env.url, env.anonKey, {
+  const supabase = createServerClient(url, anonKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
@@ -27,7 +26,7 @@ export async function middleware(request: NextRequest) {
         );
       },
     },
-  });
+  }) as SupabaseClient;
 
   try {
     await supabase.auth.getUser();
