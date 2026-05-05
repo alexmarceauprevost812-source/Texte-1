@@ -13,11 +13,9 @@ import {
   BG_MODES,
   DEFAULT_ACCENT,
   DEFAULT_BG_MODE,
-  DEFAULT_BG_OPACITY,
   STORAGE_KEY_ACCENT,
   STORAGE_KEY_API_KEY,
   STORAGE_KEY_BG_MODE,
-  STORAGE_KEY_BG_OPACITY,
   type AccentId,
   type BgMode,
 } from "@/lib/themes";
@@ -33,8 +31,6 @@ type ThemeContextValue = {
   setAccent: (id: AccentId) => void;
   bgMode: BgMode;
   setBgMode: (mode: BgMode) => void;
-  bgOpacity: number;
-  setBgOpacity: (opacity: number) => void;
   model: ModelId;
   setModel: (id: ModelId) => void;
   apiKey: string | null;
@@ -59,15 +55,9 @@ function applyBgMode(mode: BgMode) {
   document.documentElement.setAttribute("data-bg-mode", mode);
 }
 
-function clampOpacity(value: number): number {
-  if (Number.isNaN(value)) return DEFAULT_BG_OPACITY;
-  return Math.min(1, Math.max(0, value));
-}
-
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [accent, setAccentState] = useState<AccentId>(DEFAULT_ACCENT);
   const [bgMode, setBgModeState] = useState<BgMode>(DEFAULT_BG_MODE);
-  const [bgOpacity, setBgOpacityState] = useState<number>(DEFAULT_BG_OPACITY);
   const [model, setModelState] = useState<ModelId>(DEFAULT_MODEL);
   const [apiKey, setApiKeyState] = useState<string | null>(null);
 
@@ -82,22 +72,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       applyAccent(DEFAULT_ACCENT);
     }
 
-    const storedMode = window.localStorage.getItem(
-      STORAGE_KEY_BG_MODE,
-    ) as BgMode | null;
+    const storedMode = window.localStorage.getItem(STORAGE_KEY_BG_MODE);
     if (storedMode && BG_MODES.some((m) => m.id === storedMode)) {
-      setBgModeState(storedMode);
-      applyBgMode(storedMode);
+      setBgModeState(storedMode as BgMode);
+      applyBgMode(storedMode as BgMode);
     } else {
+      // Legacy "video" value or unknown — fall back to default.
       applyBgMode(DEFAULT_BG_MODE);
-    }
-
-    const storedOpacityRaw = window.localStorage.getItem(
-      STORAGE_KEY_BG_OPACITY,
-    );
-    if (storedOpacityRaw !== null) {
-      const parsed = clampOpacity(Number.parseFloat(storedOpacityRaw));
-      setBgOpacityState(parsed);
     }
 
     const storedModel = window.localStorage.getItem(STORAGE_KEY_MODEL);
@@ -123,12 +104,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     applyBgMode(mode);
   }, []);
 
-  const setBgOpacity = useCallback((opacity: number) => {
-    const clamped = clampOpacity(opacity);
-    setBgOpacityState(clamped);
-    window.localStorage.setItem(STORAGE_KEY_BG_OPACITY, clamped.toString());
-  }, []);
-
   const setModel = useCallback((id: ModelId) => {
     setModelState(id);
     window.localStorage.setItem(STORAGE_KEY_MODEL, id);
@@ -151,8 +126,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setAccent,
         bgMode,
         setBgMode,
-        bgOpacity,
-        setBgOpacity,
         model,
         setModel,
         apiKey,

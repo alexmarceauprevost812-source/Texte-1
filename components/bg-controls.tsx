@@ -29,37 +29,3 @@ export function BgModePicker() {
     </div>
   );
 }
-
-export function BgOpacitySlider() {
-  const { bgOpacity, setBgOpacity, bgMode } = useTheme();
-  const disabled = bgMode !== "video";
-  const percent = Math.round(bgOpacity * 100);
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between text-xs text-[var(--fg-70)]">
-        <span>Visibilité de la vidéo</span>
-        <span className="font-mono tabular-nums text-[var(--fg)]">
-          {percent}%
-        </span>
-      </div>
-      <input
-        type="range"
-        min={0}
-        max={100}
-        step={1}
-        value={percent}
-        disabled={disabled}
-        onChange={(event) =>
-          setBgOpacity(Number.parseInt(event.target.value, 10) / 100)
-        }
-        className="w-full accent-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-40"
-        aria-label="Visibilité de la vidéo"
-      />
-      {disabled ? (
-        <p className="text-xs text-[var(--fg-50)]">
-          Sélectionnez « Vidéo animée » pour ajuster la visibilité.
-        </p>
-      ) : null}
-    </div>
-  );
-}

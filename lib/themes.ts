@@ -15,15 +15,13 @@ export type AccentId = (typeof ACCENT_COLORS)[number]["id"];
 export const DEFAULT_ACCENT: AccentId = "orange";
 
 export const BG_MODES = [
-  { id: "video", label: "Vidéo animée" },
-  { id: "black", label: "Noir" },
-  { id: "white", label: "Blanc" },
+  { id: "black", label: "Sombre" },
+  { id: "white", label: "Clair" },
 ] as const;
 
 export type BgMode = (typeof BG_MODES)[number]["id"];
 
-export const DEFAULT_BG_MODE: BgMode = "video";
-export const DEFAULT_BG_OPACITY = 0.4;
+export const DEFAULT_BG_MODE: BgMode = "black";
 
 export const STORAGE_KEY_ACCENT = "codex-accent";
 export const STORAGE_KEY_BG_MODE = "codex-bg-mode";

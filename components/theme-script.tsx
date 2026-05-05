@@ -25,10 +25,10 @@ export function ThemeScript() {
       root.style.setProperty('--accent-text', COLORS[accent][1]);
     }
     var bgMode = localStorage.getItem('codex-bg-mode');
-    if (bgMode === 'video' || bgMode === 'black' || bgMode === 'white') {
+    if (bgMode === 'black' || bgMode === 'white') {
       root.setAttribute('data-bg-mode', bgMode);
     } else {
-      root.setAttribute('data-bg-mode', 'video');
+      root.setAttribute('data-bg-mode', 'black');
     }
   } catch (e) {}
 })();

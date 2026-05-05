@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 
 import { ApiKeySettings } from "./api-key-settings";
-import { BgModePicker, BgOpacitySlider } from "./bg-controls";
+import { BgModePicker } from "./bg-controls";
+import { ConnectionsSettings } from "./connections-settings";
 import { ThemePicker } from "./theme-picker";
 
 export function SettingsPanel({ onClose }: { onClose: () => void }) {
@@ -47,18 +48,16 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
             <ApiKeySettings />
           </Section>
 
-          <Section title="Apparence">
-            <Row label="Couleur d'accent">
-              <ThemePicker />
-            </Row>
+          <Section title="🔌  Connexions">
+            <ConnectionsSettings />
           </Section>
 
-          <Section title="Fond d'écran">
-            <Row label="Type de fond">
+          <Section title="Apparence">
+            <Row label="Thème">
               <BgModePicker />
             </Row>
-            <Row label="Visibilité">
-              <BgOpacitySlider />
+            <Row label="Couleur d'accent">
+              <ThemePicker />
             </Row>
           </Section>
 
