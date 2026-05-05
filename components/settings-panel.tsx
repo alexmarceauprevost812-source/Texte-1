@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 
+import { ApiKeySettings } from "./api-key-settings";
 import { BgModePicker, BgOpacitySlider } from "./bg-controls";
 import { ThemePicker } from "./theme-picker";
 
@@ -42,6 +43,10 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
           </button>
         </div>
         <div className="max-h-[70vh] space-y-8 overflow-y-auto p-6">
+          <Section title="🔑  Clé API Anthropic">
+            <ApiKeySettings />
+          </Section>
+
           <Section title="Apparence">
             <Row label="Couleur d'accent">
               <ThemePicker />

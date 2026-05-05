@@ -28,6 +28,7 @@ export const DEFAULT_BG_OPACITY = 0.4;
 export const STORAGE_KEY_ACCENT = "codex-accent";
 export const STORAGE_KEY_BG_MODE = "codex-bg-mode";
 export const STORAGE_KEY_BG_OPACITY = "codex-bg-opacity";
+export const STORAGE_KEY_API_KEY = "codex-anthropic-api-key";
 
 // Kept for backwards-compatibility with any older imports.
 export const STORAGE_KEY = STORAGE_KEY_ACCENT;

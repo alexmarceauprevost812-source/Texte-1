@@ -2,9 +2,9 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 
 import {
-  getAnthropicClient,
   getSystemPrompt,
   isChatMode,
+  resolveAnthropicClient,
   type ChatMode,
 } from "@/lib/chat/anthropic";
 import {
@@ -27,6 +27,7 @@ type RequestBody = {
   messages: IncomingMessage[];
   model?: ModelId;
   mode?: ChatMode;
+  apiKey?: string;
 };
 
 function jsonError(message: string, status: number): Response {
@@ -60,19 +61,19 @@ function buildPerModelParams(model: ModelId): {
 }
 
 export async function POST(req: NextRequest) {
-  const client = getAnthropicClient();
-  if (!client) {
-    return jsonError(
-      "ANTHROPIC_API_KEY n'est pas configurée sur le serveur.",
-      500,
-    );
-  }
-
   let body: RequestBody;
   try {
     body = (await req.json()) as RequestBody;
   } catch {
     return jsonError("Corps de requête JSON invalide.", 400);
+  }
+
+  const client = resolveAnthropicClient(body.apiKey);
+  if (!client) {
+    return jsonError(
+      "Aucune clé Anthropic disponible. Renseignez la vôtre dans les Paramètres ou configurez ANTHROPIC_API_KEY côté serveur.",
+      500,
+    );
   }
 
   if (!Array.isArray(body.messages) || body.messages.length === 0) {

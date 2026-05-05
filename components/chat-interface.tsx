@@ -26,7 +26,7 @@ export function ChatInterface({
   added: number;
   removed: number;
 }) {
-  const { model } = useTheme();
+  const { model, apiKey } = useTheme();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
@@ -78,6 +78,7 @@ export function ChatInterface({
         const history: Message[] = [...messages, userMessage];
         for await (const event of streamChat(history, model, {
           mode: "codex",
+          apiKey,
           signal: controller.signal,
         })) {
           if (event.type === "text") {
@@ -116,7 +117,7 @@ export function ChatInterface({
         abortRef.current = null;
       }
     },
-    [isStreaming, messages, model],
+    [apiKey, isStreaming, messages, model],
   );
 
   const handleStop = useCallback(() => {

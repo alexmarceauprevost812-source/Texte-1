@@ -13,6 +13,25 @@ export function isAnthropicConfigured(): boolean {
   return !!process.env.ANTHROPIC_API_KEY;
 }
 
+export function isValidAnthropicKey(value: unknown): value is string {
+  return typeof value === "string" && /^sk-ant-[A-Za-z0-9_-]{10,}$/.test(value);
+}
+
+/**
+ * Returns an Anthropic client. If `userApiKey` is a well-formed key, it
+ * builds a fresh client with that key (caller-provided, never cached so
+ * the user can rotate freely). Otherwise it falls back to the
+ * server-side ANTHROPIC_API_KEY env var via `getAnthropicClient()`.
+ */
+export function resolveAnthropicClient(
+  userApiKey: unknown,
+): Anthropic | null {
+  if (isValidAnthropicKey(userApiKey)) {
+    return new Anthropic({ apiKey: userApiKey });
+  }
+  return getAnthropicClient();
+}
+
 export type ChatMode = "codex" | "general";
 
 const CODEX_SYSTEM_PROMPT = `Vous êtes Codex, un assistant de programmation IA propulsé par Claude.

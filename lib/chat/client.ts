@@ -84,6 +84,7 @@ export async function filesToAttachments(
 
 export type StreamChatOptions = {
   mode?: "codex" | "general";
+  apiKey?: string | null;
   signal?: AbortSignal;
 };
 
@@ -95,6 +96,7 @@ export async function* streamChat(
   const payload = {
     model,
     mode: options.mode ?? "codex",
+    apiKey: options.apiKey ?? undefined,
     messages: messages.map((m) => ({
       role: m.role,
       content: m.content,

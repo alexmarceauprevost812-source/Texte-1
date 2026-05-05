@@ -15,6 +15,7 @@ import {
   DEFAULT_BG_MODE,
   DEFAULT_BG_OPACITY,
   STORAGE_KEY_ACCENT,
+  STORAGE_KEY_API_KEY,
   STORAGE_KEY_BG_MODE,
   STORAGE_KEY_BG_OPACITY,
   type AccentId,
@@ -36,7 +37,13 @@ type ThemeContextValue = {
   setBgOpacity: (opacity: number) => void;
   model: ModelId;
   setModel: (id: ModelId) => void;
+  apiKey: string | null;
+  setApiKey: (key: string | null) => void;
 };
+
+function isValidApiKey(value: unknown): value is string {
+  return typeof value === "string" && value.startsWith("sk-ant-");
+}
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
@@ -62,6 +69,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [bgMode, setBgModeState] = useState<BgMode>(DEFAULT_BG_MODE);
   const [bgOpacity, setBgOpacityState] = useState<number>(DEFAULT_BG_OPACITY);
   const [model, setModelState] = useState<ModelId>(DEFAULT_MODEL);
+  const [apiKey, setApiKeyState] = useState<string | null>(null);
 
   useEffect(() => {
     const storedAccent = window.localStorage.getItem(
@@ -96,6 +104,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (isModelId(storedModel)) {
       setModelState(storedModel);
     }
+
+    const storedApiKey = window.localStorage.getItem(STORAGE_KEY_API_KEY);
+    if (isValidApiKey(storedApiKey)) {
+      setApiKeyState(storedApiKey);
+    }
   }, []);
 
   const setAccent = useCallback((id: AccentId) => {
@@ -121,6 +134,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     window.localStorage.setItem(STORAGE_KEY_MODEL, id);
   }, []);
 
+  const setApiKey = useCallback((key: string | null) => {
+    if (key && isValidApiKey(key)) {
+      setApiKeyState(key);
+      window.localStorage.setItem(STORAGE_KEY_API_KEY, key);
+    } else {
+      setApiKeyState(null);
+      window.localStorage.removeItem(STORAGE_KEY_API_KEY);
+    }
+  }, []);
+
   return (
     <ThemeContext.Provider
       value={{
@@ -132,6 +155,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setBgOpacity,
         model,
         setModel,
+        apiKey,
+        setApiKey,
       }}
     >
       {children}

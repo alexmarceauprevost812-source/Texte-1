@@ -10,9 +10,12 @@ import {
 
 import { streamChat, type ClientMessage } from "@/lib/chat/client";
 
+import { useTheme } from "./theme-provider";
+
 const GHOST_MODEL = "claude-haiku-4-5"; // fast + cheap for casual chat
 
 export function GhostChat() {
+  const { apiKey } = useTheme();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ClientMessage[]>([]);
   const [input, setInput] = useState("");
@@ -66,6 +69,7 @@ export function GhostChat() {
         const history: ClientMessage[] = [...messages, userMessage];
         for await (const ev of streamChat(history, GHOST_MODEL, {
           mode: "general",
+          apiKey,
           signal: controller.signal,
         })) {
           if (ev.type === "text") {
@@ -109,7 +113,7 @@ export function GhostChat() {
         abortRef.current = null;
       }
     },
-    [input, messages, streaming],
+    [apiKey, input, messages, streaming],
   );
 
   const stop = useCallback(() => {
