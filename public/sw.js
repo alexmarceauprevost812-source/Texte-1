@@ -3,7 +3,7 @@
  * Bump CACHE_VERSION on every release: it invalidates the runtime
  * cache and triggers the "update available" flow on connected clients.
  */
-const CACHE_VERSION = "codex-v11";
+const CACHE_VERSION = "codex-v12";
 const PRECACHE_URLS = [
   "/",
   "/manifest.webmanifest",

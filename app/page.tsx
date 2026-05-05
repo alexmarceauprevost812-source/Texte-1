@@ -31,7 +31,7 @@ export default async function Home() {
   return (
     <main className="relative min-h-dvh">
       <Sidebar />
-      <div className="flex min-h-dvh flex-col sm:ml-64">
+      <div className="codex-content-shift flex min-h-dvh flex-col">
         <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-[var(--border-soft)] bg-[var(--bg-base)]/80 px-6 py-4 pl-16 backdrop-blur-xl supports-[backdrop-filter]:bg-[var(--bg-base)]/60 sm:pl-6">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-semibold tracking-tight">Codex</h1>

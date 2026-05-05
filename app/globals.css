@@ -153,3 +153,58 @@ body {
     filter: none;
   }
 }
+
+/* Sidebar-aware layout shifts.
+   - On <sm (mobile), the sidebar is an overlay drawer — content
+     stays at full width regardless of state.
+   - On >=sm (desktop), an open sidebar pushes the page content
+     right by 16rem (matches w-64) and the bottom chat-input bar by
+     18rem (16rem + room to breathe). */
+.codex-content-shift {
+  transition: margin-left 200ms ease;
+}
+
+.codex-input-shift {
+  transition: padding-left 200ms ease;
+}
+
+@media (min-width: 640px) {
+  [data-sidebar="open"] .codex-content-shift {
+    margin-left: 16rem;
+  }
+  [data-sidebar="open"] .codex-input-shift {
+    padding-left: 18rem;
+  }
+}
+
+/* Optional UI fonts. The pre-paint script sets data-font on <html>;
+   we cascade into body + form controls (which would otherwise reset
+   to the user-agent font). Code/pre stays monospace so code blocks
+   keep readable. */
+[data-font="manuscrit"] body,
+[data-font="manuscrit"] input,
+[data-font="manuscrit"] textarea,
+[data-font="manuscrit"] select,
+[data-font="manuscrit"] button {
+  font-family: var(--font-caveat), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.005em;
+}
+
+[data-font="feutre"] body,
+[data-font="feutre"] input,
+[data-font="feutre"] textarea,
+[data-font="feutre"] select,
+[data-font="feutre"] button {
+  font-family: var(--font-marker), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+/* Code always stays monospace, regardless of font choice. */
+[data-font] code,
+[data-font] pre,
+[data-font] kbd,
+[data-font] samp,
+[data-font] .font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0;
+}

@@ -30,6 +30,18 @@ export function ThemeScript() {
     } else {
       root.setAttribute('data-bg-mode', 'black');
     }
+    var sidebarStored = localStorage.getItem('codex-sidebar-open');
+    var sidebarOpen;
+    if (sidebarStored === '1') sidebarOpen = true;
+    else if (sidebarStored === '0') sidebarOpen = false;
+    else sidebarOpen = window.matchMedia('(min-width: 640px)').matches;
+    root.setAttribute('data-sidebar', sidebarOpen ? 'open' : 'closed');
+    var font = localStorage.getItem('codex-font');
+    if (font === 'manuscrit' || font === 'feutre') {
+      root.setAttribute('data-font', font);
+    } else {
+      root.setAttribute('data-font', 'standard');
+    }
   } catch (e) {}
 })();
 `;

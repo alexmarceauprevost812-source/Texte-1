@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { ApiKeySettings } from "./api-key-settings";
 import { BgModePicker } from "./bg-controls";
 import { ConnectionsSettings } from "./connections-settings";
+import { FontPicker } from "./font-picker";
+import { PersonalizationForm } from "./personalization-form";
 import { ThemePicker } from "./theme-picker";
 
 export function SettingsPanel({ onClose }: { onClose: () => void }) {
@@ -59,23 +61,13 @@ export function SettingsPanel({ onClose }: { onClose: () => void }) {
             <Row label="Couleur d'accent">
               <ThemePicker />
             </Row>
+            <Row label="Police d'écriture">
+              <FontPicker />
+            </Row>
           </Section>
 
           <Section title="Personnalisation">
-            <Row label="Nom affiché">
-              <input
-                type="text"
-                placeholder="Votre nom"
-                className="w-full rounded-2xl border border-[var(--border-soft)] bg-[var(--soft-surface)] px-4 py-2.5 text-sm placeholder:text-[var(--fg-40)] focus:border-[var(--accent)] focus:outline-none"
-              />
-            </Row>
-            <Row label="Instructions personnalisées">
-              <textarea
-                placeholder="Comment Codex devrait-il vous répondre ?"
-                rows={3}
-                className="w-full resize-none rounded-2xl border border-[var(--border-soft)] bg-[var(--soft-surface)] px-4 py-2.5 text-sm placeholder:text-[var(--fg-40)] focus:border-[var(--accent)] focus:outline-none"
-              />
-            </Row>
+            <PersonalizationForm />
           </Section>
 
           <Section title="Reconnaissance vocale">

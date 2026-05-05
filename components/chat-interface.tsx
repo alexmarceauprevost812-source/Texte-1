@@ -28,7 +28,14 @@ export function ChatInterface({
   added: number;
   removed: number;
 }) {
-  const { model, apiKey, githubProject, autoCommit } = useTheme();
+  const {
+    model,
+    apiKey,
+    githubProject,
+    autoCommit,
+    userName,
+    customInstructions,
+  } = useTheme();
   const {
     active,
     activeId,
@@ -110,6 +117,8 @@ export function ChatInterface({
         for await (const event of streamChat(working.slice(0, -1), model, {
           mode: "codex",
           apiKey,
+          customInstructions,
+          userName,
           signal: controller.signal,
         })) {
           if (event.type === "text") {
@@ -157,11 +166,13 @@ export function ChatInterface({
       apiKey,
       activeId,
       autoCommit,
+      customInstructions,
       githubProject,
       isStreaming,
       model,
       newConversation,
       updateMessages,
+      userName,
     ],
   );
 
@@ -180,7 +191,7 @@ export function ChatInterface({
           ))
         )}
       </div>
-      <div className="fixed inset-x-0 bottom-0 z-20 px-4 pb-6 pl-4 sm:pl-72">
+      <div className="codex-input-shift fixed inset-x-0 bottom-0 z-20 px-4 pb-6">
         <div className="mx-auto max-w-3xl">
           <ChatMetaBar branch={branch} added={added} removed={removed} />
           <ChatInput

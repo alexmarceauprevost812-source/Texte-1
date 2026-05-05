@@ -23,6 +23,15 @@ export type BgMode = (typeof BG_MODES)[number]["id"];
 
 export const DEFAULT_BG_MODE: BgMode = "black";
 
+export const FONTS = [
+  { id: "standard", label: "Standard" },
+  { id: "manuscrit", label: "Manuscrit (crayon)" },
+  { id: "feutre", label: "Feutre (marqueur)" },
+] as const;
+
+export type FontId = (typeof FONTS)[number]["id"];
+export const DEFAULT_FONT: FontId = "standard";
+
 export const STORAGE_KEY_ACCENT = "codex-accent";
 export const STORAGE_KEY_BG_MODE = "codex-bg-mode";
 export const STORAGE_KEY_BG_OPACITY = "codex-bg-opacity";
@@ -31,6 +40,9 @@ export const STORAGE_KEY_GITHUB_TOKEN = "codex-github-token";
 export const STORAGE_KEY_GITHUB_REPO = "codex-github-repo";
 export const STORAGE_KEY_GITHUB_BRANCH = "codex-github-branch";
 export const STORAGE_KEY_AUTO_COMMIT = "codex-auto-commit";
+export const STORAGE_KEY_FONT = "codex-font";
+export const STORAGE_KEY_USER_NAME = "codex-user-name";
+export const STORAGE_KEY_CUSTOM_INSTRUCTIONS = "codex-custom-instructions";
 
 // Kept for backwards-compatibility with any older imports.
 export const STORAGE_KEY = STORAGE_KEY_ACCENT;

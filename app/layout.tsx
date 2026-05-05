@@ -1,11 +1,26 @@
 import type { Metadata, Viewport } from "next";
+import { Caveat, Permanent_Marker } from "next/font/google";
 
 import { ConversationsProvider } from "@/components/conversations-provider";
+import { SidebarProvider } from "@/components/sidebar-provider";
 import { ServiceWorkerRegister } from "@/components/sw-register";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeScript } from "@/components/theme-script";
 
 import "./globals.css";
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
+  display: "swap",
+});
+
+const permanentMarker = Permanent_Marker({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-marker",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Codex",
@@ -35,13 +50,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" data-bg-mode="black">
+    <html
+      lang="fr"
+      data-bg-mode="black"
+      className={`${caveat.variable} ${permanentMarker.variable}`}
+    >
       <head>
         <ThemeScript />
       </head>
       <body>
         <ThemeProvider>
-          <ConversationsProvider>{children}</ConversationsProvider>
+          <SidebarProvider>
+            <ConversationsProvider>{children}</ConversationsProvider>
+          </SidebarProvider>
         </ThemeProvider>
         <ServiceWorkerRegister />
       </body>

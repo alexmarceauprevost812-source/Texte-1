@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useConversations } from "./conversations-provider";
+import { useSidebar } from "./sidebar-provider";
 import { SettingsPanel } from "./settings-panel";
 
 export function Sidebar() {
   const [showSettings, setShowSettings] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const { isOpen, open, close, toggle } = useSidebar();
   const {
     conversations,
     activeId,
@@ -16,42 +17,61 @@ export function Sidebar() {
     deleteConversation,
   } = useConversations();
 
-  const closeMobile = () => setMobileOpen(false);
+  // On mobile, close the sidebar drawer when the user picks something.
+  // On desktop the sidebar is a permanent panel — we leave it open.
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const closeOnMobile = () => {
+    if (isMobile) close();
+  };
 
   return (
     <>
-      {/* Mobile hamburger toggle — only visible when sidebar is hidden */}
-      <button
-        type="button"
-        onClick={() => setMobileOpen(true)}
-        className="fixed left-3 top-3 z-30 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-soft)] bg-[var(--rail-surface)] text-[var(--accent)] shadow backdrop-blur-xl transition hover:opacity-90 sm:hidden"
-        aria-label="Ouvrir le menu"
-      >
-        <MenuIcon />
-      </button>
+      {/* Toggle: visible whenever the sidebar is closed (any screen size). */}
+      {!isOpen ? (
+        <button
+          type="button"
+          onClick={open}
+          className="fixed left-3 top-3 z-30 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border-soft)] bg-[var(--rail-surface)] text-[var(--accent)] shadow backdrop-blur-xl transition hover:opacity-90"
+          aria-label="Ouvrir le menu"
+          aria-expanded={false}
+          aria-controls="codex-sidebar"
+        >
+          <MenuIcon />
+        </button>
+      ) : null}
 
-      {/* Mobile backdrop */}
-      {mobileOpen ? (
+      {/* Mobile backdrop — only when the drawer is open on a small screen. */}
+      {isOpen && isMobile ? (
         <button
           type="button"
           aria-label="Fermer le menu"
-          onClick={closeMobile}
+          onClick={close}
           className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm sm:hidden"
         />
       ) : null}
 
       <aside
+        id="codex-sidebar"
         className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-[var(--border-soft)] bg-[var(--rail-surface)] backdrop-blur-xl transition-transform duration-200 ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0"
+          isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Header: new conversation */}
+        {/* Header: new conversation + close toggle */}
         <div className="flex items-center gap-2 border-b border-[var(--border-soft)] p-3">
           <button
             type="button"
             onClick={() => {
               newConversation();
-              closeMobile();
+              closeOnMobile();
             }}
             className="flex flex-1 items-center gap-2 rounded-2xl border border-[var(--border-soft)] bg-[var(--soft-surface)] px-3 py-2 text-sm font-medium text-[var(--accent)] transition hover:opacity-90"
           >
@@ -60,11 +80,14 @@ export function Sidebar() {
           </button>
           <button
             type="button"
-            onClick={closeMobile}
-            className="rounded-full p-1.5 text-[var(--fg-60)] transition hover:bg-[var(--soft-surface)] hover:text-[var(--fg)] sm:hidden"
+            onClick={toggle}
+            className="rounded-full p-1.5 text-[var(--accent)] transition hover:bg-[var(--soft-surface)] hover:opacity-90"
             aria-label="Fermer le menu"
+            aria-expanded={true}
+            aria-controls="codex-sidebar"
+            title="Fermer le menu"
           >
-            <CloseIcon />
+            <PanelCloseIcon />
           </button>
         </div>
 
@@ -85,7 +108,7 @@ export function Sidebar() {
                 active={c.id === activeId}
                 onSelect={() => {
                   selectConversation(c.id);
-                  closeMobile();
+                  closeOnMobile();
                 }}
                 onDelete={() => {
                   if (
@@ -238,7 +261,7 @@ function MenuIcon() {
   );
 }
 
-function CloseIcon() {
+function PanelCloseIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -250,7 +273,9 @@ function CloseIcon() {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path d="M18 6L6 18M6 6l12 12" />
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <line x1="9" y1="3" x2="9" y2="21" />
+      <path d="M15 9l-3 3 3 3" />
     </svg>
   );
 }

@@ -28,6 +28,8 @@ type RequestBody = {
   model?: ModelId;
   mode?: ChatMode;
   apiKey?: string;
+  customInstructions?: string;
+  userName?: string;
 };
 
 function jsonError(message: string, status: number): Response {
@@ -82,7 +84,29 @@ export async function POST(req: NextRequest) {
 
   const model: ModelId = isModelId(body.model) ? body.model : DEFAULT_MODEL;
   const mode: ChatMode = isChatMode(body.mode) ? body.mode : "codex";
-  const systemPrompt = getSystemPrompt(mode);
+  const baseSystemPrompt = getSystemPrompt(mode);
+
+  const userName =
+    typeof body.userName === "string"
+      ? body.userName.trim().slice(0, 200)
+      : "";
+  const customInstructions =
+    typeof body.customInstructions === "string"
+      ? body.customInstructions.trim().slice(0, 8000)
+      : "";
+
+  const augmentations: string[] = [];
+  if (userName) {
+    augmentations.push(
+      `\n\n## Utilisateur\n\nL'utilisateur s'appelle « ${userName} ». Adressez-vous à lui par ce nom quand c'est naturel.`,
+    );
+  }
+  if (customInstructions) {
+    augmentations.push(
+      `\n\n## Instructions personnalisées de l'utilisateur\n\nL'utilisateur a défini les préférences suivantes pour vos réponses :\n\n${customInstructions}\n\nRespectez-les sauf si elles contredisent les règles ci-dessus.`,
+    );
+  }
+  const systemPrompt = baseSystemPrompt + augmentations.join("");
 
   let messages: Anthropic.MessageParam[];
   try {

@@ -13,15 +13,21 @@ import {
   BG_MODES,
   DEFAULT_ACCENT,
   DEFAULT_BG_MODE,
+  DEFAULT_FONT,
+  FONTS,
   STORAGE_KEY_ACCENT,
   STORAGE_KEY_API_KEY,
   STORAGE_KEY_AUTO_COMMIT,
   STORAGE_KEY_BG_MODE,
+  STORAGE_KEY_CUSTOM_INSTRUCTIONS,
+  STORAGE_KEY_FONT,
   STORAGE_KEY_GITHUB_BRANCH,
   STORAGE_KEY_GITHUB_REPO,
   STORAGE_KEY_GITHUB_TOKEN,
+  STORAGE_KEY_USER_NAME,
   type AccentId,
   type BgMode,
+  type FontId,
 } from "@/lib/themes";
 import {
   DEFAULT_MODEL,
@@ -41,6 +47,8 @@ type ThemeContextValue = {
   setAccent: (id: AccentId) => void;
   bgMode: BgMode;
   setBgMode: (mode: BgMode) => void;
+  font: FontId;
+  setFont: (id: FontId) => void;
   model: ModelId;
   setModel: (id: ModelId) => void;
   apiKey: string | null;
@@ -50,6 +58,12 @@ type ThemeContextValue = {
   disconnectGithubProject: () => void;
   autoCommit: boolean;
   setAutoCommit: (value: boolean) => void;
+  userName: string;
+  customInstructions: string;
+  savePersonalization: (data: {
+    userName: string;
+    customInstructions: string;
+  }) => void;
 };
 
 function isValidApiKey(value: unknown): value is string {
@@ -85,14 +99,27 @@ function applyBgMode(mode: BgMode) {
   document.documentElement.setAttribute("data-bg-mode", mode);
 }
 
+function applyFont(font: FontId) {
+  document.documentElement.setAttribute("data-font", font);
+}
+
+function isFontId(value: unknown): value is FontId {
+  return (
+    typeof value === "string" && FONTS.some((f) => f.id === value)
+  );
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [accent, setAccentState] = useState<AccentId>(DEFAULT_ACCENT);
   const [bgMode, setBgModeState] = useState<BgMode>(DEFAULT_BG_MODE);
+  const [font, setFontState] = useState<FontId>(DEFAULT_FONT);
   const [model, setModelState] = useState<ModelId>(DEFAULT_MODEL);
   const [apiKey, setApiKeyState] = useState<string | null>(null);
   const [githubProject, setGithubProjectState] =
     useState<GithubProject | null>(null);
   const [autoCommit, setAutoCommitState] = useState<boolean>(true);
+  const [userName, setUserName] = useState<string>("");
+  const [customInstructions, setCustomInstructions] = useState<string>("");
 
   useEffect(() => {
     const storedAccent = window.localStorage.getItem(
@@ -136,6 +163,24 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const storedAutoCommit = window.localStorage.getItem(STORAGE_KEY_AUTO_COMMIT);
     if (storedAutoCommit !== null) {
       setAutoCommitState(storedAutoCommit === "1");
+    }
+
+    const storedFont = window.localStorage.getItem(STORAGE_KEY_FONT);
+    if (isFontId(storedFont)) {
+      setFontState(storedFont);
+      applyFont(storedFont);
+    } else {
+      applyFont(DEFAULT_FONT);
+    }
+
+    const storedUserName = window.localStorage.getItem(STORAGE_KEY_USER_NAME);
+    if (typeof storedUserName === "string") setUserName(storedUserName);
+
+    const storedInstructions = window.localStorage.getItem(
+      STORAGE_KEY_CUSTOM_INSTRUCTIONS,
+    );
+    if (typeof storedInstructions === "string") {
+      setCustomInstructions(storedInstructions);
     }
   }, []);
 
@@ -186,6 +231,35 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     window.localStorage.setItem(STORAGE_KEY_AUTO_COMMIT, value ? "1" : "0");
   }, []);
 
+  const setFont = useCallback((id: FontId) => {
+    setFontState(id);
+    window.localStorage.setItem(STORAGE_KEY_FONT, id);
+    applyFont(id);
+  }, []);
+
+  const savePersonalization = useCallback(
+    ({
+      userName: name,
+      customInstructions: instructions,
+    }: {
+      userName: string;
+      customInstructions: string;
+    }) => {
+      setUserName(name);
+      setCustomInstructions(instructions);
+      try {
+        window.localStorage.setItem(STORAGE_KEY_USER_NAME, name);
+        window.localStorage.setItem(
+          STORAGE_KEY_CUSTOM_INSTRUCTIONS,
+          instructions,
+        );
+      } catch {
+        // ignore storage failures
+      }
+    },
+    [],
+  );
+
   return (
     <ThemeContext.Provider
       value={{
@@ -193,6 +267,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setAccent,
         bgMode,
         setBgMode,
+        font,
+        setFont,
         model,
         setModel,
         apiKey,
@@ -202,6 +278,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         disconnectGithubProject,
         autoCommit,
         setAutoCommit,
+        userName,
+        customInstructions,
+        savePersonalization,
       }}
     >
       {children}
