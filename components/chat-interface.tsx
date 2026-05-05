@@ -167,14 +167,27 @@ async function runAutoCommit(
   update: (id: string, patch: Partial<Message>) => void,
 ) {
   const files = parseFileBlocks(assistantContent);
-  if (files.length === 0) return;
+  if (files.length === 0) {
+    // Surface this so the user knows why nothing was pushed instead
+    // of being silently confused.
+    update(messageId, {
+      commit: {
+        status: "skipped",
+        message:
+          "Aucun bloc avec annotation `file:chemin` détecté dans la réponse — rien à pousser.",
+      },
+    });
+    return;
+  }
 
-  const pending: CommitState = { status: "pending" };
-  update(messageId, { commit: pending });
+  const paths = files.map((f) => f.path);
+  update(messageId, {
+    commit: { status: "pending", files: files.length, paths },
+  });
 
   const commitMessage = userPrompt.trim()
     ? `Codex: ${userPrompt.trim().slice(0, 64)}`
-    : `Codex: update ${files.map((f) => f.path).join(", ").slice(0, 100)}`;
+    : `Codex: update ${paths.join(", ").slice(0, 100)}`;
 
   try {
     const res = await fetch("/api/commit", {
@@ -197,7 +210,7 @@ async function runAutoCommit(
         // ignore
       }
       update(messageId, {
-        commit: { status: "error", message: errMsg },
+        commit: { status: "error", message: errMsg, paths },
       });
       return;
     }
@@ -211,6 +224,7 @@ async function runAutoCommit(
         status: "ok",
         url: data.url,
         files: data.files,
+        paths,
       },
     });
   } catch (error) {
@@ -219,6 +233,7 @@ async function runAutoCommit(
         status: "error",
         message:
           error instanceof Error ? error.message : "Erreur réseau inconnue.",
+        paths,
       },
     });
   }

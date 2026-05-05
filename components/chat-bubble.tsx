@@ -74,36 +74,103 @@ export function ChatBubble({ message }: { message: Message }) {
 function CommitBanner({
   commit,
 }: {
-  commit: { status: "pending" | "ok" | "error"; message?: string; url?: string; files?: number };
+  commit: {
+    status: "pending" | "ok" | "error" | "skipped";
+    message?: string;
+    url?: string;
+    files?: number;
+    paths?: string[];
+  };
 }) {
+  if (commit.status === "skipped") {
+    return (
+      <div className="space-y-1 rounded-xl border border-[var(--border-soft)] bg-[var(--soft-surface)] px-3 py-2 text-xs text-[var(--fg-70)]">
+        <p>ℹ️ {commit.message ?? "Rien à pousser."}</p>
+        <p className="text-[var(--fg-50)]">
+          Pour activer l'auto-push, demandez à Codex d'utiliser la fence{" "}
+          <code className="rounded bg-black/40 px-1 py-px">
+            ```lang file:chemin/fichier.ext
+          </code>
+          .
+        </p>
+      </div>
+    );
+  }
   if (commit.status === "pending") {
     return (
-      <p className="rounded-xl border border-[var(--border-soft)] bg-[var(--soft-surface)] px-3 py-2 text-xs text-[var(--fg-70)]">
-        Push vers GitHub en cours…
-      </p>
+      <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--soft-surface)] px-3 py-2 text-xs text-[var(--fg-70)]">
+        <p>
+          Push vers GitHub en cours…{" "}
+          {commit.files ? (
+            <span className="text-[var(--fg-50)]">
+              ({commit.files} fichier{commit.files > 1 ? "s" : ""})
+            </span>
+          ) : null}
+        </p>
+        {commit.paths?.length ? (
+          <PathList paths={commit.paths} muted />
+        ) : null}
+      </div>
     );
   }
   if (commit.status === "error") {
     return (
-      <p className="rounded-xl bg-red-500/10 px-3 py-2 text-xs text-red-400">
-        Push échoué : {commit.message ?? "erreur inconnue"}
-      </p>
+      <div className="space-y-1 rounded-xl bg-red-500/10 px-3 py-2 text-xs text-red-400">
+        <p>
+          <span className="font-medium">Push échoué.</span>{" "}
+          <span className="text-red-300">
+            {commit.message ?? "erreur inconnue"}
+          </span>
+        </p>
+        {commit.paths?.length ? (
+          <PathList paths={commit.paths} muted />
+        ) : null}
+      </div>
     );
   }
   return (
-    <p className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-400">
-      ✓ {commit.files ?? 0} fichier{(commit.files ?? 0) > 1 ? "s" : ""} poussé(s).{" "}
-      {commit.url ? (
-        <a
-          href={commit.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline underline-offset-2"
+    <div className="space-y-1 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-400">
+      <p>
+        ✓ {commit.files ?? 0} fichier
+        {(commit.files ?? 0) > 1 ? "s" : ""} poussé(s).{" "}
+        {commit.url ? (
+          <a
+            href={commit.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2"
+          >
+            Voir le commit
+          </a>
+        ) : null}
+      </p>
+      {commit.paths?.length ? <PathList paths={commit.paths} /> : null}
+    </div>
+  );
+}
+
+function PathList({
+  paths,
+  muted = false,
+}: {
+  paths: string[];
+  muted?: boolean;
+}) {
+  return (
+    <ul
+      className={`flex flex-wrap gap-1 font-mono text-[10px] ${
+        muted ? "text-[var(--fg-50)]" : ""
+      }`}
+    >
+      {paths.map((p) => (
+        <li
+          key={p}
+          className="rounded bg-black/30 px-1.5 py-px"
         >
-          Voir le commit
-        </a>
-      ) : null}
-    </p>
+          {p}
+        </li>
+      ))}
+    </ul>
   );
 }
 

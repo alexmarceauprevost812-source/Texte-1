@@ -4,63 +4,67 @@ export type ParsedFile = {
   language: string;
 };
 
-const FENCE_RE = /^```([A-Za-z0-9_+-]*)\s+file:([^\s`]+)\s*$/m;
+/**
+ * Matches the opening fence of a Codex code block. Tolerates:
+ *   ```ts file:lib/x.ts
+ *   ```typescript file: lib/x.ts
+ *   ```js file=lib.js
+ *   ```ts file:"lib/x.ts"
+ *   ``` file:lib/x.ts            (no language)
+ *   ```ts file:./lib/x.ts        (./ stripped at normalization)
+ */
+const FENCE_RE =
+  /^([\t ]*)```([A-Za-z0-9_+#-]*)\s*file[:=]\s*["']?([^\s`'"]+)["']?\s*$/;
+
+const CLOSING_FENCE_RE = /^[\t ]*```\s*$/;
 
 /**
  * Extracts code blocks tagged with `file:<path>` from a markdown body.
- *
- * Format expected (per the Codex system prompt):
- *
- *     ```ts file:app/page.tsx
- *     // ...code...
- *     ```
- *
- * Returns one entry per file. If the same path appears multiple times,
- * the last occurrence wins (the model is expected to provide the final
- * version of each file).
+ * If the same path appears multiple times, the last occurrence wins.
  */
 export function parseFileBlocks(text: string): ParsedFile[] {
   const out: ParsedFile[] = [];
   const lines = text.split("\n");
   let i = 0;
   while (i < lines.length) {
-    const line = lines[i];
-    const match = line.match(FENCE_RE);
+    const match = lines[i].match(FENCE_RE);
     if (!match) {
       i++;
       continue;
     }
-    const language = match[1] ?? "";
-    const rawPath = match[2].trim();
-    if (!isSafePath(rawPath)) {
-      i++;
-      continue;
-    }
-    const buffer: string[] = [];
+    const language = match[2] ?? "";
+    const rawPath = match[3];
+    const path = normalizePath(rawPath);
     i++;
-    while (i < lines.length && !/^```/.test(lines[i])) {
+    const buffer: string[] = [];
+    while (i < lines.length && !CLOSING_FENCE_RE.test(lines[i])) {
       buffer.push(lines[i]);
       i++;
     }
-    // Skip the closing fence
-    if (i < lines.length) i++;
+    if (i < lines.length) i++; // consume closing fence
+    if (path === null) continue; // unsafe path, skip
     out.push({
-      path: rawPath,
+      path,
       content: buffer.join("\n") + (buffer.length > 0 ? "\n" : ""),
       language,
     });
   }
-  // Dedupe by path: keep the last one
   const seen = new Map<string, ParsedFile>();
   for (const file of out) seen.set(file.path, file);
   return Array.from(seen.values());
 }
 
-function isSafePath(path: string): boolean {
-  if (!path) return false;
-  if (path.startsWith("/")) return false;
-  if (path.includes("..")) return false;
-  if (path.includes("\\")) return false;
-  if (path.length > 512) return false;
-  return /^[A-Za-z0-9_./-]+$/.test(path);
+function normalizePath(raw: string): string | null {
+  let p = raw.trim();
+  if (!p) return null;
+  // Strip "./" prefix
+  while (p.startsWith("./")) p = p.slice(2);
+  // Strip leading slashes
+  while (p.startsWith("/")) p = p.slice(1);
+  if (!p) return null;
+  if (p.includes("..")) return null;
+  if (p.includes("\\")) return null;
+  if (p.length > 512) return null;
+  if (!/^[A-Za-z0-9_./-]+$/.test(p)) return null;
+  return p;
 }

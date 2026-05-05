@@ -10,10 +10,11 @@ export type ClientAttachment = {
 };
 
 export type CommitState = {
-  status: "pending" | "ok" | "error";
+  status: "pending" | "ok" | "error" | "skipped";
   message?: string;
   url?: string;
   files?: number;
+  paths?: string[];
 };
 
 export type ClientMessage = {
